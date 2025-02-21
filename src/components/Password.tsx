@@ -5,28 +5,26 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 type props = {
   setStep: (_step: number) => void;
-  postUser : Function
-  setUser : (_user:User) => void,
-  user:User
+  postUser: Function;
+  setUser: (_user: User) => void;
+  user: User;
 };
-type User ={
-  email: string,
-  password : string
-}
+type User = {
+  email: string;
+  password: string;
+};
 const Password = ({ setStep, postUser, setUser, user }: props) => {
   const router = useRouter();
-  const [password, setPassword] = useState<string>("");
+
   const [confirm, setConfirm] = useState<string>("");
   const [isPasswordError, SetErrorPassword] = useState<string | undefined>();
   const [showPass, setShow] = useState(false);
   const goLoginPage = () => {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
-    if ((password)) {
-      if (password === confirm) {
-        setUser({...user, password:password})
-        postUser()
-        router.push("/login")
+    if (user.password.length !== 0) {
+      if (user.password === confirm) {
+        postUser();
       } else {
         SetErrorPassword("!match");
       }
@@ -34,7 +32,6 @@ const Password = ({ setStep, postUser, setUser, user }: props) => {
       SetErrorPassword("weak");
     }
   };
-  console.log(isPasswordError);
 
   return (
     <>
@@ -56,8 +53,8 @@ const Password = ({ setStep, postUser, setUser, user }: props) => {
           type={showPass == true ? "text" : "password"}
           className="h-9 pl-4 w-full border rounded-md"
           placeholder="new-password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          value={user.password}
           style={{
             borderColor: isPasswordError === "weak" ? "red" : "#71717A",
           }}
@@ -67,7 +64,7 @@ const Password = ({ setStep, postUser, setUser, user }: props) => {
             type={showPass == true ? "text" : "password"}
             placeholder="confirm-password"
             className="h-9 pl-4 w-full border rounded-md"
-            onChange={(e) => setConfirm(e.target.value)}
+            onChange={(e) => setConfirm(e.target.value.toString())}
             value={confirm}
             style={{
               borderColor: isPasswordError === "!match" ? "red" : "#71717A",
@@ -83,7 +80,7 @@ const Password = ({ setStep, postUser, setUser, user }: props) => {
           )}
         </div>
         <div className="flex gap-2">
-          <input type="checkbox" onClick={()=>setShow((prev)=> !prev)}/>
+          <input type="checkbox" onClick={() => setShow((prev) => !prev)} />
           <p>Show password</p>
         </div>
       </form>

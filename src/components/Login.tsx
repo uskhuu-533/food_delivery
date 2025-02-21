@@ -35,12 +35,9 @@ const Login = () => {
         const text = await response.text();
         console.log("Response status:", response.status);
         console.log("Response text:", text);
-       
-    
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return text
+       if(text == "Signed in successfully"){
+        router.push("/admin/menu")
+       }
       } catch (err) {
         console.error("Error posting user:", err);
       }
@@ -48,7 +45,7 @@ const Login = () => {
   const jumpToHome = () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (regex.test(form.email)) {
-        // checkPassword()
+        checkPassword()
     } else {
       setInvaild(true);
     }
@@ -101,7 +98,7 @@ const Login = () => {
           </div>
         </form>
         <button
-        onClick={checkPassword}
+        onClick={jumpToHome}
         className="py-[4px] w-full border rounded-md"
       >
         let's go

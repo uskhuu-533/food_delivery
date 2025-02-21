@@ -11,6 +11,7 @@ type User = {
   email:string,
   password: string
 }
+
 const Email = ({ setStep, setUser, user }: props) => {
   const [emailValue, setEmailValue] = useState<string>("");
   const [isEmailInvaild, setInvaild] = useState(false);

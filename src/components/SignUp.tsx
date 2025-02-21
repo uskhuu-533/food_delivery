@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+
+
+import { useRouter } from "next/navigation";
 import Email from "./Email";
 import Password from "./Password";
-import { useRouter } from "next/navigation";
 type User = {
   email: string;
   password: string;
@@ -9,15 +11,15 @@ type User = {
 const SignUP = () => {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
-  const [user, setUser] = useState<User>({ email: "", password: "" });
+  const [user, setUser] = useState<User>({ email: "", password:"" });
   const goLoginPage = () => {
     router.push("/login");
   };
 
   console.log(user);
-  //{email: 'example@email.com', password: 'Geeks@123'}
 
   const postUser = async () => {
+
     try {
       const response = await fetch("http://localhost:3000/users", {
         method: "POST",
@@ -36,8 +38,13 @@ const SignUP = () => {
       }
     } catch (err) {
       console.error("Error posting user:", err);
+    }finally{
+      router.push(`/login`)
     }
+
   };
+
+  
 
   return (
     <div className="w-[40%] flex items-center justify-center">
