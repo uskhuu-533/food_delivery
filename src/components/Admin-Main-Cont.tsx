@@ -13,8 +13,9 @@ type newfood = {
   food_name: string,
   price: string,
   food_description: string,
-  food_image : File | undefined,
-  title : string 
+  food_image : string | null,
+  category : string ,
+  _id : object
 }
 const AdminCont = () => {
       const [categories, setCategory] = useState<Response[]>([]);
@@ -36,7 +37,7 @@ const AdminCont = () => {
             <AdminHeader setAdded={setAdded}/>
             <div className="flex flex-col w-full gap-6 pb-10">
                 {categories.map((category:Response, index)=>
-                (<CategoryFoods key={index} category={category}/>))
+                (<CategoryFoods  fetchCategory={fetchCategory}  key={index} category={category}/>))
             }
             </div>
         </div>
