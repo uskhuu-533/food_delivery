@@ -6,7 +6,7 @@ import CategoryFoods from "./Category-Foods"
 
 type Response = {
     title : string,
-    _id : object,
+    _id : string,
     foods : Array<newfood>
 }
 type newfood = {

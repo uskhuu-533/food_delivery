@@ -12,7 +12,7 @@ type props = {
 };
 type Response = {
   title: string;
-  _id: object;
+  _id: string;
   foods: Array<Food>;
 };
 type Food = {
@@ -29,7 +29,7 @@ const CategoryFoods = ({ category, fetchCategory}: props) => {
   const getFood = async () =>{
     try{
   
-      const response = await axios.get(`http://localhost:3000/food/${category.title}`)  
+      const response = await axios.get(`http://localhost:3000/food/${category._id}`)  
       setFoods(response.data)
     }catch(error){
       console.log(error);

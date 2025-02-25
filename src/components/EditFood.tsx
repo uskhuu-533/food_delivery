@@ -27,7 +27,7 @@ type Food = {
 }
 type Response = {
     title : string,
-    _id : object,
+    _id : string,
     foods : Array<Food>
 }
 const EditFood = ({ food , getFood}: Props) => {
@@ -154,7 +154,7 @@ const EditFood = ({ food , getFood}: Props) => {
             </label>
             <select name="category" value={editedFood.category}   onChange={(e) => setEditedFood({...editedFood, category: e.target.value})}>
                 {categories.map((category:Response, index)=>(
-                    <option key={index} value={category.title} >{category.title}</option>
+                    <option key={index} value={category._id} >{category.title}</option>
                 ))}
             </select>
           </div>

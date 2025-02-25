@@ -18,7 +18,8 @@ import axios from "axios";
 type Response = {
   title: string;
   count: number;
-  foods :Array<foods>
+  foods :Array<foods>,
+  _id : string
 };
 type foods = {
     food_name : string
@@ -73,7 +74,7 @@ const AdminHeader = ({setAdded}: Props) => {
   
       try{
     
-        const response = await axios.get(`http://localhost:3000/food/all%20dishes`)
+        const response = await axios.get(`http://localhost:3000/food/1`)
         console.log(response);
         
         setFoods(response.data)
