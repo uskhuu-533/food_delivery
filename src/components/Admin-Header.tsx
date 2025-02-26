@@ -74,14 +74,12 @@ const AdminHeader = ({setAdded}: Props) => {
   
       try{
     
-        const response = await axios.get(`http://localhost:3000/food/1`)
+        const response = await axios.get(`http://localhost:3000/food`)
         console.log(response);
         
         setFoods(response.data)
       }catch(error){
         console.log(error);
-        
-      
     }
   }
   useEffect(()=> {
