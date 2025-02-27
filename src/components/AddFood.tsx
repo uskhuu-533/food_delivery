@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { uploadImage } from "@/utils/image-upload";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import axios from "axios";
 import { Plus } from "lucide-react";
@@ -50,35 +51,13 @@ const AddNewFood = ({ category, getFood }: Props) => {
       getFood();
     }
   };
-  const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.type == "file" && e.target.files) {
-      const file = e.target.files[0];
-      const formData = new FormData();
-
-      try {
-        if (file) {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", "food12345");
-
-          const response = await fetch(
-            `https://api.cloudinary.com/v1_1/dqhu3nn3p/auto/upload`,
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
-
-          const result = await response.json();
-          setNewFood({ ...newFood, food_image: result.secure_url });
-
-          if (response.ok) {
-            console.log(result);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const URL = await uploadImage(e)
+      setNewFood({...newFood, food_image:URL})
+    } catch (error) {
+      console.log(error);
+      
     }
   };
   return (
@@ -132,12 +111,13 @@ const AddNewFood = ({ category, getFood }: Props) => {
           </div>
           <div>
             <label>Food Image</label>
-            <input type="file" onChange={(e) => uploadImage(e)} />
+            <input type="file" onChange={(e) => handleUploadImage(e)} />
           </div>
           <DialogDescription></DialogDescription>
           <DialogFooter>
             <Button type="submit" onClick={addNewFood}>
-              Add dish            </Button>
+              Add dish{" "}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

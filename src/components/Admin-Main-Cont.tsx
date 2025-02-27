@@ -34,10 +34,10 @@ const AdminCont = () => {
       },[added]);
     return(
         <div className="flex max-w-[1171px] w-full flex-col gap-6 ml-[235px] items-center mt-8 relative">
-            <AdminHeader setAdded={setAdded}/>
+            <AdminHeader fetchCategory={fetchCategory} categories={categories}/>
             <div className="flex flex-col w-full gap-6 pb-10">
                 {categories.map((category:Response, index)=>
-                (<CategoryFoods  fetchCategory={fetchCategory}  key={index} category={category}/>))
+                (<CategoryFoods  key={index} category={category}/>))
             }
             </div>
         </div>

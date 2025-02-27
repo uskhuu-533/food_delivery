@@ -61,26 +61,15 @@ const EditFood = ({ food , getFood}: Props) => {
       console.log(err);
     }
   };
-  const uploadFoodImage = async (e:React.ChangeEvent<HTMLInputElement>) =>{
-    if (e.target.type == "file" && e.target.files) {
-        const file = e.target.files[0];
-        const formData = new FormData();
-  
-        try {
-          if (file) {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "food12345");
-  
-            const response = await axios.post(`https://api.cloudinary.com/v1_1/dqhu3nn3p/auto/upload`, formData)
-            setEditedFood({...editedFood, food_image : response.data.secure_url})
-           
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-  } 
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const URL = await uploadImage(e)
+      setEditedFood({...editedFood, food_image:URL})
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
   const deleteFood = async () =>{
     try {
         const response = await axios.delete(`http://localhost:3000/food/${food._id}`)
@@ -180,7 +169,7 @@ const EditFood = ({ food , getFood}: Props) => {
               type="file"
               className="col-span-3 border rounded-md"
               onChange={(e) =>
-                uploadFoodImage(e)
+                handleUploadImage(e)
               }
             />
           </div>

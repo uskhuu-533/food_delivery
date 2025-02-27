@@ -7,7 +7,7 @@ import AddNewFood from "./AddFood";
 import EditFood from "./EditFood";
 type props = {
   category: Response;
-  fetchCategory : Function,
+
  
 };
 type Response = {
@@ -23,7 +23,7 @@ type Food = {
   category: string;
   _id : object
 };
-const CategoryFoods = ({ category, fetchCategory}: props) => {
+const CategoryFoods = ({ category}: props) => {
   const [foods, setFoods] = useState([])
 
   const getFood = async () =>{

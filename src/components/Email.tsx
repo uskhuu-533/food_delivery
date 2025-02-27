@@ -4,13 +4,13 @@ import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 type props = {
   setStep: (_step: number) => void;
-  setUser :(_user:User) => void,
-  user:User
+  setUser: (_user: User) => void;
+  user: User;
 };
 type User = {
-  email:string,
-  password: string
-}
+  email: string;
+  password: string;
+};
 
 const Email = ({ setStep, setUser, user }: props) => {
   const [emailValue, setEmailValue] = useState<string>("");
@@ -26,25 +26,9 @@ const Email = ({ setStep, setUser, user }: props) => {
   };
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // setEmailValue(value);
     setInvaild(false);
-    setUser({...user ,email:value})
+    setUser({ ...user, email: value });
   };
-  
-  useEffect(() => {
-  
-
-    const fetchusers = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/users`);
-        const results = await response.json();
-        console.log(results);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    // fetchusers();
-  });
 
   return (
     <>
