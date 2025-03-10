@@ -13,7 +13,6 @@ type props = {
 type Response = {
   title: string;
   _id: string;
-  foods: Array<Food>;
 };
 type Food = {
   food_name: string;

@@ -11,7 +11,7 @@ import {
 import { uploadImage } from "@/utils/image-upload";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import axios from "axios";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useState } from "react";
 type Props = {
   category: Response;
@@ -25,7 +25,7 @@ type newfood = {
   food_name: string;
   price: string;
   food_description: string;
-  food_image: File | undefined;
+  food_image: string | null;
   category: string;
 };
 const AddNewFood = ({ category, getFood }: Props) => {
@@ -33,10 +33,10 @@ const AddNewFood = ({ category, getFood }: Props) => {
     food_name: "",
     price: "",
     food_description: "",
-    food_image: undefined,
+    food_image: null,
     category: category._id,
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const addNewFood = async () => {
     try {
       const response = await axios.post(
@@ -53,13 +53,17 @@ const AddNewFood = ({ category, getFood }: Props) => {
   };
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const URL = await uploadImage(e)
-      setNewFood({...newFood, food_image:URL})
+      setIsLoading(true);
+      const URL = await uploadImage(e);
+      setNewFood({ ...newFood, food_image: URL });
     } catch (error) {
       console.log(error);
-      
+    } finally {
+      setIsLoading(false);
     }
   };
+
+
   return (
     <div className="w-[271px] h-[257px] rounded-md border-[#EF4444] border-2 border-dashed flex gap-6 items-center justify-center">
       <Dialog>
@@ -71,7 +75,7 @@ const AddNewFood = ({ category, getFood }: Props) => {
             <Plus size={16} />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[460px] flex flex-col gap-8">
+        <DialogContent className="sm:max-w-[460px] flex flex-col gap-6">
           <DialogHeader>
             <DialogTitle className="text-black text-xl">
               Add new Dish to Appetizers
@@ -111,7 +115,25 @@ const AddNewFood = ({ category, getFood }: Props) => {
           </div>
           <div>
             <label>Food Image</label>
-            <input type="file" onChange={(e) => handleUploadImage(e)} />
+            {isLoading === false ?(<>{newFood.food_image === null && (
+              <input
+                className="p-4 border h-[150px] w-full rounded-md"
+                type="file"
+                placeholder="Choose a file or drag & drop it here"
+                onChange={(e) => handleUploadImage(e)}
+              />
+            )}
+            {newFood.food_image && (
+              <div className="w-full h-[150px] flex items-center relative overflow-hidden rounded-md">
+                <img src={newFood.food_image} className="w-full" />
+                <Button className="absolute rounded-full w-4 h-8 top-2 right-2 z-20"
+                   onClick={() => setNewFood({ ...newFood, food_image: null })}>
+                  <X
+                    size={4}
+                  />
+                </Button>
+              </div>
+            )}</>):(<div className="w-full h-[150px] animate-pulse bg-gray-400/30 rounded-md"></div>)}
           </div>
           <DialogDescription></DialogDescription>
           <DialogFooter>

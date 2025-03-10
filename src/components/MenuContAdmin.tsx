@@ -3,6 +3,7 @@
 import { ComponentIcon, LayoutDashboardIcon, Settings, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 const MenuContAdmin = () => {
   const [path, setPath] = useState("");
@@ -22,30 +23,30 @@ const MenuContAdmin = () => {
 
   return (
     <div className="w-full h-fit flex flex-col gap-6">
-      <div
+      <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "menu" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
         onClick={()=> router.push("/admin/menu")}
       >
         <LayoutDashboardIcon size={22} />
         <p>Food menu</p>
-      </div>
-      <div
+      </Button>
+      <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "order" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
         onClick={()=> router.push("/admin/order")}
       >
         <Truck size={22} />
         <p>Orders</p>
-      </div>
-      <div
+      </Button>
+      <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "settings" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
         onClick={()=> router.push("/admin/settings")}
       >
         <Settings size={22} />
         <p>Settings</p>
-      </div>
+      </Button>
     </div>
   );
 };

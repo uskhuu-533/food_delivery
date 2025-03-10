@@ -19,7 +19,7 @@ type newfood = {
 }
 const AdminCont = () => {
       const [categories, setCategory] = useState<Response[]>([]);
-      const [added, setAdded] = useState(true)
+ 
      const fetchCategory = async () => {
         try {
           const response = await fetch(`http://localhost:3000/category`);
@@ -31,9 +31,9 @@ const AdminCont = () => {
       };
       useEffect(() => {
         fetchCategory();
-      },[added]);
+      },[]);
     return(
-        <div className="flex max-w-[1171px] w-full flex-col gap-6 ml-[235px] items-center mt-8 relative">
+        <div className="flex w-full flex-col gap-6 ml-[200px] items-center mt-8 relative px-8">
             <AdminHeader fetchCategory={fetchCategory} categories={categories}/>
             <div className="flex flex-col w-full gap-6 pb-10">
                 {categories.map((category:Response, index)=>

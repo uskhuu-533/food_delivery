@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { uploadImage } from "@/utils/image-upload";
 import axios from "axios";
-import { Edit2, Trash } from "lucide-react";
+import { Edit2, Trash, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner"
 type Props = {
@@ -39,6 +39,7 @@ const EditFood = ({ food , getFood}: Props) => {
     food_image: food.food_image,
     price: food.price,
   });
+  const [isLoading, setIsLoading] = useState(false)
   const editFood = async () => {
     try {
       const response = axios.put(`http://localhost:3000/food/${food._id}`, editedFood);
@@ -63,11 +64,13 @@ const EditFood = ({ food , getFood}: Props) => {
   };
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      setIsLoading(true)
       const URL = await uploadImage(e)
       setEditedFood({...editedFood, food_image:URL})
     } catch (error) {
       console.log(error);
-      
+    }finally{
+      setIsLoading(false)
     }
   };
   const deleteFood = async () =>{
@@ -160,18 +163,29 @@ const EditFood = ({ food , getFood}: Props) => {
               }
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="w-full">
             <label htmlFor="username" className="text-right">
               Image
             </label>
-            <input
-              id="username"
-              type="file"
-              className="col-span-3 border rounded-md"
-              onChange={(e) =>
-                handleUploadImage(e)
-              }
-            />
+            {isLoading === false ?(<>{editedFood.food_image === null && (
+              <input
+                className="p-4 border h-[150px] w-full rounded-md"
+                type="file"
+                placeholder="Choose a file or drag & drop it here"
+                onChange={(e) => handleUploadImage(e)}
+              />
+            )}
+            {editedFood.food_image && (
+              <div className="w-full h-[150px] flex items-center relative overflow-hidden rounded-md">
+                <img src={editedFood.food_image} className="w-full" />
+                <Button className="absolute rounded-full w-4 h-8 top-2 right-2 z-20"
+                   onClick={() => setEditedFood({ ...editedFood, food_image: null })}>
+                  <X
+                    size={4}
+                  />
+                </Button>
+              </div>
+            )}</>):(<div className="w-full h-[150px] animate-pulse bg-gray-400/30 rounded-md"></div>)}
           </div>
         </div>
         <DialogFooter className="flex justify-between">

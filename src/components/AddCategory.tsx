@@ -8,9 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useState } from "react";
 type Props = {
   fetchCategory: Function;
@@ -18,6 +19,9 @@ type Props = {
 const AddCategory = ({ fetchCategory }: Props) => {
   const [newCategory, setNewCategory] = useState({ title: "" });
   const addNewCategory = async () => {
+    if(newCategory.title.length === 0){
+      return 
+    }
     try {
       const response = await fetch("http://localhost:3000/category", {
         method: "POST",
@@ -68,10 +72,11 @@ const AddCategory = ({ fetchCategory }: Props) => {
           />
         </div>
         <DialogDescription></DialogDescription>
+
         <DialogFooter>
-          <Button type="submit" onClick={addNewCategory}>
+          <DialogClose type="submit" className="bg-black text-white px-4 py-2 rounded-md" onClick={addNewCategory}>
             add category
-          </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

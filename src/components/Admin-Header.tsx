@@ -40,7 +40,7 @@ const AdminHeader = ({fetchCategory, categories}: Props) => {
   },[])
 
   return (
-    <div className=" w-full max-w-[1171px] h-fit top-6  flex flex-col gap-6">
+    <div className=" w-full h-fit top-6 flex flex-col gap-6">
       <Avatar />
       <div className="w-full h-fit rounded-md p-6 bg-white flex flex-col gap-3">
         <div className="text-xl font-bold text-black">Dishes category</div>
