@@ -1,6 +1,6 @@
 "use client";
 
-import Login from "@/components/Login";
+import Login from "@/app/login/_features/Login";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

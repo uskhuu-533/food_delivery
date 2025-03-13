@@ -1,5 +1,13 @@
-"use client";
+import AdminCont from "@/app/_features/Admin-Main-Cont"
+import SideBar from "@/components/Side-Bar"
 
-export default function Home() {
-  return <div className="w-screen flex h-screen items-center">Home page</div>;
+const Home = () => {
+    return(
+        <div className="w-screen flex bg-[#F4F4F5] h-fit gap-10">
+            <SideBar />
+            <AdminCont />
+            
+      </div>
+    )
 }
+export default Home

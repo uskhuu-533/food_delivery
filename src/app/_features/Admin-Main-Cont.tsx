@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import AdminHeader from "./Admin-Header"
+
 import CategoryFoods from "./Category-Foods"
+import FoodMenuHeader from "@/app/_features/Food-Menu-Header";
 
 type Response = {
     title : string,
     _id : string,
-    foods : Array<newfood>
+    food_count : Array<foods>
 }
-type newfood = {
+type foods = {
   food_name: string,
   price: string,
   food_description: string,
@@ -36,7 +37,7 @@ const AdminCont = () => {
       },[]);
     return(
         <div className="flex w-full flex-col gap-6 ml-[200px] items-center mt-8 relative px-8">
-            <AdminHeader fetchCategory={fetchCategory} categories={categories}/>
+            <FoodMenuHeader fetchCategory={fetchCategory} categories={categories}/>
             <div className="flex flex-col w-full gap-6 pb-10">
                 {categories.map((category:Response, index)=>
                 (<CategoryFoods  key={index} category={category} categories={categories}/>))

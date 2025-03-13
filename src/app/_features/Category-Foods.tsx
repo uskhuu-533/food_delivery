@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios"
-import AddNewFood from "./AddFood";
-import EditFood from "./EditFood";
+import AddNewFood from "../_components/AddFood";
+import EditFood from "../_components/EditFood";
 type props = {
   category: Response;
   categories : Response[]

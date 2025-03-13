@@ -114,10 +114,10 @@ const AddNewFood = ({ category, getFood }: Props) => {
             />
           </div>
           <div>
-            <label>Food Image</label>
+            <label>Food Image
             {isLoading === false ?(<>{newFood.food_image === null && (
               <input
-                className="p-4 border h-[150px] w-full rounded-md"
+                className="p-4 border h-[150px] w-full rounded-md hidden"
                 type="file"
                 placeholder="Choose a file or drag & drop it here"
                 onChange={(e) => handleUploadImage(e)}
@@ -133,7 +133,7 @@ const AddNewFood = ({ category, getFood }: Props) => {
                   />
                 </Button>
               </div>
-            )}</>):(<div className="w-full h-[150px] animate-pulse bg-gray-400/30 rounded-md"></div>)}
+            )}</>):(<div className="w-full h-[150px] animate-pulse bg-gray-400/30 rounded-md"></div>)}</label>
           </div>
           <DialogDescription></DialogDescription>
           <DialogFooter>

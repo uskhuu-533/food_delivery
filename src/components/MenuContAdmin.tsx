@@ -10,11 +10,11 @@ const MenuContAdmin = () => {
   const router = useRouter()
   useEffect(() => {
     const pathName = () => {
-      if (window.location.pathname === "/admin/menu") {
+      if (window.location.pathname === "/") {
         setPath("menu");
-      } else if (window.location.pathname === "/admin/order") {
+      } else if (window.location.pathname === "/order") {
         setPath("order");
-      } else if (window.location.pathname === "/admin/settings") {
+      } else if (window.location.pathname === "/settings") {
         setPath("settings");
       }
     };
@@ -26,7 +26,7 @@ const MenuContAdmin = () => {
       <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "menu" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
-        onClick={()=> router.push("/admin/menu")}
+        onClick={()=> router.push("/")}
       >
         <LayoutDashboardIcon size={22} />
         <p>Food menu</p>
@@ -34,7 +34,7 @@ const MenuContAdmin = () => {
       <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "order" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
-        onClick={()=> router.push("/admin/order")}
+        onClick={()=> router.push("/order")}
       >
         <Truck size={22} />
         <p>Orders</p>
@@ -42,7 +42,7 @@ const MenuContAdmin = () => {
       <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "settings" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
-        onClick={()=> router.push("/admin/settings")}
+        onClick={()=> router.push("/settings")}
       >
         <Settings size={22} />
         <p>Settings</p>

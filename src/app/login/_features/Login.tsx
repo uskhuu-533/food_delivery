@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,16 +24,15 @@ const Login = () => {
   };
   const checkPassword = async () => {
     try {
-      const response = await fetch("http://localhost:999/users/login", {
-        method: "POST",
+      const response = await axios.post("http://localhost:3000/users/login",form ,{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
       });
-      const body = await response.json();
+    
+console.log(response);
 
-      localStorage.setItem("token", body.token);
+      localStorage.setItem("token", response.data);
       router.push("/");
     } catch (err) {
       console.error("Error posting user:", err);
@@ -101,7 +101,7 @@ const Login = () => {
         </button>
         <div className="flex w-full justify-center gap-4">
           <p>Don’t have an account?</p>
-          <p onClick={() => router.push("/")} className="text-[#2563EB]">
+          <p onClick={() => router.push("/sign-up")} className="text-[#2563EB]">
             Sign up
           </p>
         </div>
