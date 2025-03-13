@@ -1,9 +1,9 @@
 "use client";
 
-import SignUP from "@/components/SignUp";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import RegistrationForm from "./_features/RegistrationForm";
 
 export default function Home() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="w-screen flex h-screen items-center">
-      <SignUP />
+      <RegistrationForm />
       <Image src="/home.webp" width={856} height={904} alt="home" />
     </div>
   );

@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useRouter } from "next/navigation";
-import Email from "../_components/RegistrationEmailForm";
-import Password from "../_components/RegistrationPasswordForm";
+import { RegistrationEmailInput } from "../_components/Registration-Email-Input";
+import { RegistrationPasswordInput } from "../_components/Registration-Password-Input";
+
 type User = {
   email: string;
   password: string;
 };
-const SignUP = () => {
+const RegistrationForm = () => {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [user, setUser] = useState<User>({ email: "", password: "" });
@@ -43,9 +44,13 @@ const SignUP = () => {
     <div className="w-[40%] flex items-center justify-center">
       <div className="w-[80%] flex flex-col h-fit gap-6">
         {step === 1 ? (
-          <Email user={user} setUser={setUser} setStep={setStep} />
+          <RegistrationEmailInput
+            user={user}
+            setUser={setUser}
+            setStep={setStep}
+          />
         ) : (
-          <Password
+          <RegistrationPasswordInput
             user={user}
             setUser={setUser}
             setStep={setStep}
@@ -62,4 +67,4 @@ const SignUP = () => {
     </div>
   );
 };
-export default SignUP;
+export default RegistrationForm;

@@ -12,7 +12,7 @@ type User = {
   password: string;
 };
 
-const Email = ({ setStep, setUser, user }: props) => {
+export const RegistrationEmailInput = ({ setStep, setUser, user }: props) => {
   const [isEmailInvaild, setInvaild] = useState(false);
 
   const jumpToPassword = () => {
@@ -58,9 +58,8 @@ const Email = ({ setStep, setUser, user }: props) => {
         onClick={jumpToPassword}
         className="py-[4px] w-full border rounded-md"
       >
-        let's go
+        let&apos;s go
       </button>
     </>
   );
 };
-export default Email;

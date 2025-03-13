@@ -1,27 +1,30 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 type props = {
   setStep: (_step: number) => void;
-  postUser: Function;
+  postUser: () => Promise<void>;
   setUser: (_user: User) => void;
   user: User;
 };
+
 type User = {
   email: string;
   password: string;
 };
-const Password = ({ setStep, postUser, setUser, user }: props) => {
-  const router = useRouter();
 
+export const RegistrationPasswordInput = ({
+  setStep,
+  postUser,
+  setUser,
+  user,
+}: props) => {
   const [confirm, setConfirm] = useState<string>("");
   const [isPasswordError, SetErrorPassword] = useState<string | undefined>();
   const [showPass, setShow] = useState(false);
   const goLoginPage = () => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
     if (user.password.length !== 0) {
       if (user.password === confirm) {
         postUser();
@@ -93,4 +96,3 @@ const Password = ({ setStep, postUser, setUser, user }: props) => {
     </>
   );
 };
-export default Password;
