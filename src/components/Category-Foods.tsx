@@ -7,8 +7,7 @@ import AddNewFood from "./AddFood";
 import EditFood from "./EditFood";
 type props = {
   category: Response;
-
- 
+  categories : Response[]
 };
 type Response = {
   title: string;
@@ -22,7 +21,7 @@ type Food = {
   category: string;
   _id : object
 };
-const CategoryFoods = ({ category}: props) => {
+const CategoryFoods = ({ category, categories}: props) => {
   const [foods, setFoods] = useState([])
 
   const getFood = async () =>{
@@ -56,7 +55,7 @@ const CategoryFoods = ({ category}: props) => {
                 alt="food"
                 className="w-full scale-100"
               />
-              <EditFood getFood={getFood} food={food}/>
+              <EditFood getFood={getFood}  food={food} categories={categories}/>
             </div>
             <div className="w-full flex justify-between">
               <p>{food.food_name}</p>

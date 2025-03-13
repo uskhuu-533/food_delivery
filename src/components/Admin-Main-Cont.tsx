@@ -24,6 +24,8 @@ const AdminCont = () => {
         try {
           const response = await fetch(`http://localhost:3000/category`);
           const results = await response.json();
+          console.log(results);
+          
           setCategory(results);
         } catch (err) {
           console.log(err);
@@ -37,7 +39,7 @@ const AdminCont = () => {
             <AdminHeader fetchCategory={fetchCategory} categories={categories}/>
             <div className="flex flex-col w-full gap-6 pb-10">
                 {categories.map((category:Response, index)=>
-                (<CategoryFoods  key={index} category={category}/>))
+                (<CategoryFoods  key={index} category={category} categories={categories}/>))
             }
             </div>
         </div>
