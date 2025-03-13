@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Suspense } from "react";
+import { AuthenticationProvider } from "@/provider/authentication-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NuqsAdapter>{children}</NuqsAdapter>
+            <NuqsAdapter>
+              <AuthenticationProvider>{children} </AuthenticationProvider>
+            </NuqsAdapter>
           </ThemeProvider>
         </Suspense>
       </body>

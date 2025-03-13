@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import Email from "./Email";
-import Password from "./Password";
+import Email from "../_components/RegistrationEmailForm";
+import Password from "../_components/RegistrationPasswordForm";
 type User = {
   email: string;
   password: string;

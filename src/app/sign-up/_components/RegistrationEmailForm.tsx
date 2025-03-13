@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 type props = {
   setStep: (_step: number) => void;
   setUser: (_user: User) => void;
@@ -13,7 +13,6 @@ type User = {
 };
 
 const Email = ({ setStep, setUser, user }: props) => {
-  const [emailValue, setEmailValue] = useState<string>("");
   const [isEmailInvaild, setInvaild] = useState(false);
 
   const jumpToPassword = () => {

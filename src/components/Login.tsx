@@ -8,44 +8,40 @@ type form = {
   password: string;
 };
 const Login = () => {
-    const router = useRouter()
+  const router = useRouter();
   const [form, setFrom] = useState<form>({ email: "", password: "" });
   const [isEmailInvaild, setInvaild] = useState(false);
   const [showPass, setShow] = useState(false);
 
-
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setFrom({...form, email:value})
+    setFrom({ ...form, email: value });
   };
-  const handlePasswordInput =(e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setFrom({...form, password:value})
-  }
-  const checkPassword = async () =>{
+    setFrom({ ...form, password: value });
+  };
+  const checkPassword = async () => {
     try {
-        const response = await fetch("http://localhost:3000/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        });
-    
-        const text = await response.text();
-        console.log("Response status:", response.status);
-        console.log("Response text:", text);
-       if(text == "Signed in successfully"){
-        router.push("/admin/menu")
-       }
-      } catch (err) {
-        console.error("Error posting user:", err);
-      }
-  }
+      const response = await fetch("http://localhost:999/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const body = await response.json();
+
+      localStorage.setItem("token", body.token);
+      router.push("/");
+    } catch (err) {
+      console.error("Error posting user:", err);
+    }
+  };
   const jumpToHome = () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (regex.test(form.email)) {
-        checkPassword()
+      checkPassword();
     } else {
       setInvaild(true);
     }
@@ -86,7 +82,7 @@ const Login = () => {
             type={showPass == true ? "text" : "password"}
             className="h-9 pl-4 w-full border rounded-md"
             placeholder="new-password"
-              onChange={(e) =>handlePasswordInput(e)}
+            onChange={(e) => handlePasswordInput(e)}
             value={form.password || ""}
             //   style={{
             //     borderColor: isPasswordError === "weak" ? "red" : "#71717A",
@@ -98,14 +94,16 @@ const Login = () => {
           </div>
         </form>
         <button
-        onClick={jumpToHome}
-        className="py-[4px] w-full border rounded-md"
-      >
-        let's go
-      </button>
+          onClick={jumpToHome}
+          className="py-[4px] w-full border rounded-md"
+        >
+          let&apos;s go
+        </button>
         <div className="flex w-full justify-center gap-4">
           <p>Don’t have an account?</p>
-          <p onClick={()=>router.push('/')} className="text-[#2563EB]">Sign up</p>
+          <p onClick={() => router.push("/")} className="text-[#2563EB]">
+            Sign up
+          </p>
         </div>
       </div>
     </div>
