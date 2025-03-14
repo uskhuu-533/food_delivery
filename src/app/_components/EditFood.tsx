@@ -55,7 +55,8 @@ const EditFood = ({ food, getFood, categories }: Props) => {
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setIsLoading(true);
-      const URL = await uploadImage(e);
+      if (e.target.files == null) return
+      const URL = await uploadImage(e.target.files[0]);
       setEditedFood({ ...editedFood, food_image: URL });
     } catch (error) {
       console.log(error);

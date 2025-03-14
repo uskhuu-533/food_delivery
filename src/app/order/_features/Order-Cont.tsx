@@ -15,6 +15,8 @@ import {
 import Avatar from "../../../components/Avatar";
 import OrderFoodDetai from "../_components/OrderFoodDetail";
 import OrderHeader from "./Order-Header";
+import { useQueryState, parseAsInteger } from 'nuqs'
+import { PaginationComponent } from "@/components/Pagination";
 type Response = {
   _id: string;
   userData: UserData;
@@ -43,9 +45,19 @@ type Order = {
   status: string;
 };
 
+type Data = {
+  orders : Order[]
+  totalPages : number
+  totalResults : number
+}
 const OrderCont = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [data, setData] = useState<Data>({
+    orders: [],
+    totalPages : 1,
+    totalResults : 0
+  });
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1))
   const transformOrders = (data: Response[]) => {
     return data.map((order, index) => ({
       id: order._id,
@@ -60,18 +72,18 @@ const OrderCont = () => {
   };
   const getOrders = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/foodorder/admin`);
+      const response = await axios.get(`http://localhost:3000/foodorder/admin/${page}`);
       console.log(response);
-      const transformedOrders = transformOrders(response.data);
+      const transformedOrders = transformOrders(response.data.data);
       console.log(transformedOrders);
-      setOrders(transformedOrders);
+      setData({orders : transformedOrders, totalPages: response.data.totalPage, totalResults : response.data.totalResults});
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getOrders();
-  }, []);
+  }, [page]);
   const handleCheckBox = (id: string) => {
     if (checkedBox.includes(id)) {
       setCheckedBox((prev) => prev.filter((item) => item !== id));
@@ -81,17 +93,17 @@ const OrderCont = () => {
   };
 
   const handleChangeAllStatus = () => {
-    if (checkedBox.length === orders.length) {
+    if (checkedBox.length === data?.orders.length) {
       setCheckedBox([]);
     } else {
-      setCheckedBox(orders.map((item) => item.id));
+      setCheckedBox(data.orders.map((item) => item.id));
     }
   };
 
   return (
     <div className="ml-[200px] px-8 w-full py-10">
       <Avatar />
-      <OrderHeader checkedBox={checkedBox} orders={orders}  getOrders={getOrders}/>
+      <OrderHeader checkedBox={checkedBox} totalResults={data.totalResults}  getOrders={getOrders}/>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -100,7 +112,7 @@ const OrderCont = () => {
               <input
                 type="checkbox"
                 onChange={handleChangeAllStatus}
-                checked={checkedBox.length === orders.length}
+                checked={checkedBox.length === data.orders.length}
               />
             </TableHead>
             <TableHead className="w-[100px]">№</TableHead>
@@ -113,7 +125,7 @@ const OrderCont = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
+          {data.orders.map((order) => (
             <TableRow key={order.id}>
               <TableCell>
                 <input
@@ -140,6 +152,7 @@ const OrderCont = () => {
           <TableRow></TableRow>
         </TableFooter>
       </Table>
+      <PaginationComponent totalPages={data.totalPages}/>
     </div>
   );
 };

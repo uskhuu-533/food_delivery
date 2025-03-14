@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import FoodCount from "../_components/Food-Count";
+
 import axios from "axios";
 import AddCategory from "../_components/AddCategory";
 import Avatar from "../../components/Avatar";
@@ -29,7 +29,6 @@ const FoodMenuHeader = ({ fetchCategory, categories }: Props) => {
     try {
       const response = await axios.get(`http://localhost:3000/food`);
       console.log(response);
-
       setFoods(response.data);
     } catch (error) {
       console.log(error);

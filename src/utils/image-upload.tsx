@@ -1,7 +1,6 @@
 
-export const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (e.target.type == "file" && e.target.files) {
-    const file = e.target.files[0];
+export const uploadImage = async (file:File) => {
+  
     try {
       if (file) {
         const formData = new FormData();
@@ -24,4 +23,4 @@ export const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
       console.log(err);
     }
   }
-};
+

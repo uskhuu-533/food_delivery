@@ -4,27 +4,19 @@ import axios from "axios";
 import ChangeStatus from "../_components/ChageStatus";
 
 type Props = {
-  orders: Order[];
+  totalResults : number
   checkedBox: string[];
   getOrders() : Promise<void>
 };
-type Order = {
-  id: string;
-  index: number;
-  customer: string;
-  createdAt: string;
-  totalPrice: string;
-  address: string;
-  status: string;
-};
-const OrderHeader = ({ orders, checkedBox , getOrders}: Props) => {
+
+const OrderHeader = ({ totalResults, checkedBox , getOrders}: Props) => {
     
  
   return (
     <div className="w-full p-4 flex justify-between">
       <div className="flex flex-col">
         <div>Order</div>
-        <div>{orders.length} items</div>
+        <div>{totalResults} items</div>
       </div>
       <div className="flex">
         <DateFilter />

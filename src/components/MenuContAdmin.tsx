@@ -34,7 +34,7 @@ const MenuContAdmin = () => {
       <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "order" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
-        onClick={()=> router.push("/order")}
+        onClick={()=> router.push("/order?page=1")}
       >
         <Truck size={22} />
         <p>Orders</p>
