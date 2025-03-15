@@ -15,13 +15,14 @@ import {
 import Avatar from "../../../components/Avatar";
 import OrderFoodDetai from "../_components/OrderFoodDetail";
 import OrderHeader from "./Order-Header";
-import { useQueryState, parseAsInteger } from 'nuqs'
+import { useQueryState, parseAsInteger } from "nuqs";
 import { PaginationComponent } from "@/components/Pagination";
-type Response = {
+import { addDays } from "date-fns";
+type Order = {
   _id: string;
   userData: UserData;
   orderItems: item[];
-  createdAt: Date;
+  createdAt: string;
   totalPrice: number;
   status: string;
 };
@@ -33,50 +34,43 @@ type item = {
   food: { food_name: string; food_image: string };
   quantity: number;
 };
-
-type Order = {
-  id: string;
-  index: number;
-  customer: string;
-  item: item[];
-  createdAt: string;
-  totalPrice: string;
-  address: string;
-  status: string;
-};
-
 type Data = {
-  orders : Order[]
-  totalPages : number
-  totalResults : number
+  orders: Order[];
+  totalPages: number;
+  totalResults: number;
+};
+type DateType = {
+  from : Date
+  to : Date
 }
 const OrderCont = () => {
   const [data, setData] = useState<Data>({
     orders: [],
-    totalPages : 1,
-    totalResults : 0
+    totalPages: 1,
+    totalResults: 0,
   });
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1))
-  const transformOrders = (data: Response[]) => {
-    return data.map((order, index) => ({
-      id: order._id,
-      index: index + 1,
-      customer: order.userData.email,
-      item: order.orderItems,
-      createdAt: new Date(order.createdAt).toLocaleDateString(),
-      totalPrice: `$${order.totalPrice.toFixed(2)}`,
-      address: order.userData.address,
-      status: order.status,
-    }));
-  };
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+   const [date, setDate] = useState<DateType>({
+      from: addDays(new Date(), -20),
+      to: new Date(),
+    });
   const getOrders = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/foodorder/admin/${page}`);
+      const response = await axios.get(
+        `http://localhost:3000/foodorder/admin/${page}`,{
+          params: {
+            startDate : date.from.toISOString(),
+            endDate : date.to.toISOString()
+          }
+        });
       console.log(response);
-      const transformedOrders = transformOrders(response.data.data);
-      console.log(transformedOrders);
-      setData({orders : transformedOrders, totalPages: response.data.totalPage, totalResults : response.data.totalResults});
+  
+      setData({
+        orders: response.data.data,
+        totalPages: response.data.totalPage,
+        totalResults: response.data.totalResults,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -91,19 +85,23 @@ const OrderCont = () => {
       setCheckedBox([...checkedBox, id]);
     }
   };
-
   const handleChangeAllStatus = () => {
     if (checkedBox.length === data?.orders.length) {
       setCheckedBox([]);
     } else {
-      setCheckedBox(data.orders.map((item) => item.id));
+      setCheckedBox(data.orders.map((item) => item._id));
     }
   };
-
   return (
     <div className="ml-[200px] px-8 w-full py-10">
       <Avatar />
-      <OrderHeader checkedBox={checkedBox} totalResults={data.totalResults}  getOrders={getOrders}/>
+      <OrderHeader
+      date={date}
+        checkedBox={checkedBox}
+        totalResults={data.totalResults}
+        getOrders={getOrders}
+        setDate={setDate}
+      />
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -125,25 +123,24 @@ const OrderCont = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.orders.map((order) => (
-            <TableRow key={order.id}>
+          {data.orders.map((order, index) => (
+            <TableRow key={order._id}>
               <TableCell>
                 <input
-                  onChange={() => handleCheckBox(order.id)}
+                  onChange={() => handleCheckBox(order._id)}
                   type="checkbox"
-                  checked={checkedBox.includes(order.id)}
-              
+                  checked={checkedBox.includes(order._id)}
                 />
               </TableCell>
-              <TableCell className="font-medium">{order.index}</TableCell>
-              <TableCell>{order.customer}</TableCell>
+              <TableCell className="font-medium">{index+1}</TableCell>
+              <TableCell>{order.userData.email}</TableCell>
               <TableCell className="flex justify-between">
-                <div>{order.item.length}food</div>
-                <OrderFoodDetai item={order.item} />
+                <div>{order.orderItems.length}food</div>
+                <OrderFoodDetai item={order.orderItems} />
               </TableCell>
               <TableCell>{order.createdAt}</TableCell>
               <TableCell>{order.totalPrice}</TableCell>
-              <TableCell>{order.address} </TableCell>
+              <TableCell>{order.userData.address} </TableCell>
               <TableCell>{order.status}</TableCell>
             </TableRow>
           ))}
@@ -152,7 +149,7 @@ const OrderCont = () => {
           <TableRow></TableRow>
         </TableFooter>
       </Table>
-      <PaginationComponent totalPages={data.totalPages}/>
+      <PaginationComponent totalPages={data.totalPages} />
     </div>
   );
 };

@@ -1,15 +1,22 @@
 import { Button } from "@/components/ui/button";
-import DateFilter from "../_components/DateFilter";
+
 import axios from "axios";
 import ChangeStatus from "../_components/ChageStatus";
+import { DatePicker } from "../_components/DatePicker";
 
 type Props = {
   totalResults : number
   checkedBox: string[];
   getOrders() : Promise<void>
+  setDate : (date:DateType)=> void
+  date : DateType
 };
+type DateType = {
+  to : Date
+  from : Date
+}
 
-const OrderHeader = ({ totalResults, checkedBox , getOrders}: Props) => {
+const OrderHeader = ({ totalResults, checkedBox , getOrders, setDate, date}: Props) => {
     
  
   return (
@@ -18,8 +25,8 @@ const OrderHeader = ({ totalResults, checkedBox , getOrders}: Props) => {
         <div>Order</div>
         <div>{totalResults} items</div>
       </div>
-      <div className="flex">
-        <DateFilter />
+      <div className="flex gap-3">
+        <DatePicker setDate={setDate} date={date} getOrders={getOrders}/>
        <ChangeStatus checkedOrders={checkedBox} getOrders={getOrders}/>
       </div>
     </div>

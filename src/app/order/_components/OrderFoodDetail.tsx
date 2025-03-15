@@ -1,11 +1,8 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ChevronDown } from "lucide-react";
 type Props = {
   item: item[];
@@ -17,26 +14,35 @@ type item = {
 
 const OrderFoodDetai = ({ item }: Props) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <ChevronDown size={16}/>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel></DropdownMenuLabel>
-        <DropdownMenuSeparator />
+    <Popover>
+      <PopoverTrigger asChild>
+        <ChevronDown size={16} />
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col gap-2">
         {item.map((item: item, index) => (
-          <DropdownMenuItem key={index} className="flex w-[263px] justify-between">
+          <div
+            key={index}
+            className="flex w-[263px] justify-between items-center"
+          >
             <div className="flex h-full gap-2">
-                <div className="overflow-hidden w-[80px] h-[60px] rounded-md flex ">
-                    <img alt="food" className="w-full object-cover" src={item.food.food_image}/>
-                </div>
-                <div>{item.food.food_name}</div>
+              <div className="overflow-hidden w-[80px] h-[60px] rounded-md flex ">
+                <img
+                  alt="food"
+                  className="w-full object-cover"
+                  src={item.food.food_image}
+                />
+              </div>
+              <div className="h-[60px] flex items-center">
+                <p>{item.food.food_name}</p>
+              </div>
             </div>
-            <div>{item.quantity}</div>
-          </DropdownMenuItem>
+            <div>x{item.quantity}</div>
+          </div>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 };
 export default OrderFoodDetai;
+
+//
