@@ -18,17 +18,18 @@ import OrderHeader from "./Order-Header";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { PaginationComponent } from "@/components/Pagination";
 import { addDays } from "date-fns";
+import ChangeOneStatus from "../_components/ChangeOneStatus";
+import { ChevronsUpDown } from "lucide-react";
 type Order = {
   _id: string;
-  userData: UserData;
+  userData: {
+    email: string;
+    address: string;
+  };
   orderItems: item[];
   createdAt: string;
   totalPrice: number;
   status: string;
-};
-type UserData = {
-  email: string;
-  address: string;
 };
 type item = {
   food: { food_name: string; food_image: string };
@@ -40,9 +41,9 @@ type Data = {
   totalResults: number;
 };
 type DateType = {
-  from : Date
-  to : Date
-}
+  from: Date;
+  to: Date;
+};
 const OrderCont = () => {
   const [data, setData] = useState<Data>({
     orders: [],
@@ -51,21 +52,22 @@ const OrderCont = () => {
   });
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-   const [date, setDate] = useState<DateType>({
-      from: addDays(new Date(), -20),
-      to: new Date(),
-    });
+  const [date, setDate] = useState<DateType>({
+    from: addDays(new Date(), -20),
+    to: new Date(),
+  });
   const getOrders = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/foodorder/admin/${page}`,{
+        `http://localhost:3000/foodorder/admin/${page}`,
+        {
           params: {
-            startDate : date.from.toISOString(),
-            endDate : date.to.toISOString()
-          }
-        });
+            startDate: date.from.toISOString(),
+            endDate: date.to.toISOString(),
+          },
+        }
+      );
       console.log(response);
-  
       setData({
         orders: response.data.data,
         totalPages: response.data.totalPage,
@@ -77,7 +79,7 @@ const OrderCont = () => {
   };
   useEffect(() => {
     getOrders();
-  }, [page]);
+  }, [page, date]);
   const handleCheckBox = (id: string) => {
     if (checkedBox.includes(id)) {
       setCheckedBox((prev) => prev.filter((item) => item !== id));
@@ -92,11 +94,17 @@ const OrderCont = () => {
       setCheckedBox(data.orders.map((item) => item._id));
     }
   };
+  const sortOrderByStatus = () => {
+    const sortedOrder = data.orders.sort((a, b)=>b.status.localeCompare(a.status))
+    console.log(sortedOrder);
+    setData({...data, orders:sortedOrder})
+
+  }
   return (
     <div className="ml-[200px] px-8 w-full py-10">
       <Avatar />
       <OrderHeader
-      date={date}
+        date={date}
         checkedBox={checkedBox}
         totalResults={data.totalResults}
         getOrders={getOrders}
@@ -116,10 +124,15 @@ const OrderCont = () => {
             <TableHead className="w-[100px]">№</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Food</TableHead>
-            <TableHead>Date</TableHead>
+            <TableHead className="justify-between flex items-center">
+              <p>Date</p>
+              <ChevronsUpDown size={16} />
+            </TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Delivery address</TableHead>
-            <TableHead>Delivery status</TableHead>
+            <TableHead className="justify-between flex items-center">Delivery status
+              <ChevronsUpDown onClick={sortOrderByStatus} size={16}/>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -132,7 +145,7 @@ const OrderCont = () => {
                   checked={checkedBox.includes(order._id)}
                 />
               </TableCell>
-              <TableCell className="font-medium">{index+1}</TableCell>
+              <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{order.userData.email}</TableCell>
               <TableCell className="flex justify-between">
                 <div>{order.orderItems.length}food</div>
@@ -141,7 +154,13 @@ const OrderCont = () => {
               <TableCell>{order.createdAt}</TableCell>
               <TableCell>{order.totalPrice}</TableCell>
               <TableCell>{order.userData.address} </TableCell>
-              <TableCell>{order.status}</TableCell>
+              <TableCell>
+                <ChangeOneStatus
+                  getOrders={getOrders}
+                  orderId={order._id}
+                  defaultStatus={order.status}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

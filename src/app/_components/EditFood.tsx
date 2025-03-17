@@ -8,10 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { uploadImage } from "@/utils/image-upload";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Edit2, Trash, X } from "lucide-react";
 import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import FormsField from "./Form-Field";
+import ImageInput from "./ImageInput";
 type Props = {
   food: Food;
   getFood: Function;
@@ -19,49 +25,64 @@ type Props = {
 };
 type Food = {
   food_name: string;
-  price: string;
+  price: number;
   food_description: string;
   food_image: string | null;
-  category: string;
+  category: Response;
   _id: object;
 };
 type Response = {
   title: string;
   _id: string;
 };
+const formSchema = z.object({
+  food_name: z.string().min(1, { message: "Field food name is required." }),
+  price: z
+    .string()
+    .min(1, { message: "Field price is required." })
+    .transform((value) => parseInt(value)),
+  food_description: z
+    .string()
+    .min(1, { message: "Field ingredients are required." }),
+  category: z.string().min(1, { message: "category " }),
+});
 const EditFood = ({ food, getFood, categories }: Props) => {
-  const [editedFood, setEditedFood] = useState({
-    category: food.category,
-    food_name: food.food_name,
-    food_description: food.food_description,
-    food_image: food.food_image,
-    price: food.price,
+  const [image, setImage] = useState<File | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      food_name: food.food_name,
+      price: food.price,
+      food_description: food.food_description,
+      category: food.category._id,
+    },
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const editFood = async () => {
-    try {
-      const response = axios.put(
-        `http://localhost:3000/food/${food._id}`,
-        editedFood
-      );
-      console.log(response);
-      console.log(editedFood);
-      getFood();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true);
-      if (e.target.files == null) return
-      const URL = await uploadImage(e.target.files[0]);
-      setEditedFood({ ...editedFood, food_image: URL });
+      setLoading(true);
+      let foodImage = food.food_image;
+      if (image) {
+        foodImage = await uploadImage(image);
+      }
+      const foodData = {
+        categoty: values.category,
+        food_name: values.food_name,
+        price: values.price,
+        food_description: values.food_description,
+        food_image: foodImage,
+      };
+        const response = await axios.put(
+          `http://localhost:3000/food/${food._id}/${foodData.categoty}`,
+          foodData
+        );
+        console.log(response);
+        getFood()
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
   const deleteFood = async () => {
@@ -76,7 +97,6 @@ const EditFood = ({ food, getFood, categories }: Props) => {
       getFood();
     }
   };
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -84,7 +104,7 @@ const EditFood = ({ food, getFood, categories }: Props) => {
           variant="outline"
           className="absolute w-11 h-11 right-3 bottom-4 rounded-full"
         >
-          <Edit2 size={5} stroke="#EF4444" />
+          <Edit2 size={16} stroke="#EF4444" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -92,110 +112,70 @@ const EditFood = ({ food, getFood, categories }: Props) => {
           <DialogTitle>Dishes info</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="name" className="text-right">
-              Dish name
-            </label>
-            <input
-              value={editedFood.food_name}
-              id="name"
-              className="col-span-3 border rounded-md"
-              onChange={(e) =>
-                setEditedFood({ ...editedFood, food_name: e.target.value })
-              }
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <FormsField
+              name="food_name"
+              type="text"
+              form={form}
+              label="Dish name"
+              placeholder="Type food name..."
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="username" className="text-right">
-              Ingredients
-            </label>
-            <input
-              value={editedFood.food_description}
-              id="username"
-              className="col-span-3 border rounded-md"
-              onChange={(e) =>
-                setEditedFood({
-                  ...editedFood,
-                  food_description: e.target.value,
-                })
-              }
+            <FormsField
+              name="price"
+              type="number"
+              form={form}
+              label="price"
+              placeholder="Enter price..."
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="username" className="text-right">
-              Category
-            </label>
-            <select
+            <FormsField
               name="category"
-              value={editedFood.category}
-              onChange={(e) =>
-                setEditedFood({ ...editedFood, category: e.target.value })
-              }
-            >
-              {categories.map((category: Response, index) => (
-                <option key={index} value={category._id}>
-                  {category.title}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="username" className="text-right">
-              price
-            </label>
-            <input
-              value={editedFood.price}
-              id="username"
-              className="col-span-3 border rounded-md"
-              onChange={(e) =>
-                setEditedFood({ ...editedFood, price: e.target.value })
-              }
+              form={form}
+              categories={categories}
+              label="Dish category"
             />
-          </div>
-          <div className="w-full">
-            <label htmlFor="username" className="text-right">
-              Image
-            </label>
-            {isLoading === false ? (
-              <>
-                {editedFood.food_image === null && (
-                  <input
-                    className="p-4 border h-[150px] w-full rounded-md"
-                    type="file"
-                    placeholder="Choose a file or drag & drop it here"
-                    onChange={(e) => handleUploadImage(e)}
-                  />
-                )}
-                {editedFood.food_image && (
-                  <div className="w-full h-[150px] flex items-center relative overflow-hidden rounded-md">
-                    <img src={editedFood.food_image} className="w-full" />
-                    <Button
-                      className="absolute rounded-full w-4 h-8 top-2 right-2 z-20"
-                      onClick={() =>
-                        setEditedFood({ ...editedFood, food_image: null })
-                      }
-                    >
-                      <X size={4} />
-                    </Button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="w-full h-[150px] animate-pulse bg-gray-400/30 rounded-md"></div>
-            )}
-          </div>
-        </div>
-        <DialogFooter className="flex justify-between">
-          <Button onClick={deleteFood}>
-            <Trash />
-          </Button>
-          <Button type="submit" onClick={editFood}>
-            Save changes
-          </Button>
-        </DialogFooter>
+            <FormsField
+              name="food_description"
+              form={form}
+              type="text"
+              label="Ingredients"
+              placeholder="List ingredients..."
+            />
+            <ImageInput
+              defaultPreview={food.food_image}
+              image={image}
+              setImage={setImage}
+            />
+            <Button onClick={deleteFood}>
+              <Trash />
+            </Button>
+            <Button type="submit">Save changes</Button>
+          </form>
+        </FormProvider>
+        <DialogFooter className="flex justify-between"></DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 export default EditFood;
+
+{
+  /* <div className="grid grid-cols-4 items-center gap-4">
+<label htmlFor="username" className="text-right">
+  Category
+</label>
+<select
+  name="category"
+  value={editedFood.category}
+  onChange={(e) =>
+    setEditedFood({ ...editedFood, category: e.target.value })
+  }
+>
+  {categories.map((category: Response, index) => (
+    <option key={index} value={category._id}>
+      {category.title}
+    </option>
+  ))}
+</select>
+</div> */
+}

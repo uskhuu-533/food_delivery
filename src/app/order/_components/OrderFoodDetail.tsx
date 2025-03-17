@@ -29,11 +29,11 @@ const OrderFoodDetai = ({ item }: Props) => {
                 <img
                   alt="food"
                   className="w-full object-cover"
-                  src={item.food.food_image}
+                  src={item.food?.food_image ? item.food.food_image : "" }
                 />
               </div>
               <div className="h-[60px] flex items-center">
-                <p>{item.food.food_name}</p>
+                <p>{item.food?.food_name}</p>
               </div>
             </div>
             <div>x{item.quantity}</div>

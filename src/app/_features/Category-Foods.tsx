@@ -15,7 +15,7 @@ type Response = {
 };
 type Food = {
   food_name: string;
-  price: string;
+  price: number;
   food_description: string;
   food_image: string | null;
   category: string;
