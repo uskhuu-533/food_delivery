@@ -36,7 +36,7 @@ const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
             " border-green-300 hover:bg-green-300/30 "
           }`}
         >
-          <p>{statusLocal}</p>
+          <p>{defaultStatus}</p>
           <ChevronsUpDown />
         </Button>
       </PopoverTrigger>

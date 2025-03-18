@@ -24,9 +24,7 @@ const ChangeStatus =({checkedOrders, getOrders}:Props) => {
     const [status, setStatus] = useState('')
     const handleChangeStatus = async () => {
       const response = await chaneManyStatus(checkedOrders, status)
-      if (response?.status === 200) {
-        getOrders()
-      }
+        getOrders()  
       };
     return(
         <Dialog>
