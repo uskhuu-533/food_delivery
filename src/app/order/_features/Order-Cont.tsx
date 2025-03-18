@@ -145,6 +145,7 @@ const OrderCont = () => {
                 <ChangeOneStatus
                   orderId={order._id}
                   defaultStatus={order.status}
+                  getOrders={getOrders}
                 />
               </TableCell>
             </TableRow>

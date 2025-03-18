@@ -14,10 +14,12 @@ import { useState } from "react";
 type Props = {
   defaultStatus: string;
   orderId: string;
+  getOrders() : Promise<void> 
 };
-const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
+const ChangeOneStatus = ({ defaultStatus, orderId, getOrders }: Props) => {
   const handleChangeStatus = async (status: string) => {
     await changeStatus(orderId, status);
+    getOrders()
   };
   return (
     <Popover>
