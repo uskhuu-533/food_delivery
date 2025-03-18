@@ -9,33 +9,34 @@ import {
 import { changeStatus } from "@/utils/orderRequest";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 
 type Props = {
   defaultStatus: string;
   orderId: string;
-  getOrders(): Promise<void>;
 };
-const ChangeOneStatus = ({ defaultStatus, orderId, getOrders }: Props) => {
+const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
+  const [statusLocal, setStatus] = useState(defaultStatus)
   const handleChangeStatus = async (status: string) => {
+    setStatus(status)    
     const response = await changeStatus(orderId, status);
     if (response?.status === 200) {
-      getOrders();
+      setStatus(defaultStatus)
     }
-    getOrders();
   };
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           className={`rounded-full bg-inherit text-black border ${
-            defaultStatus === "PENDING" &&
+            statusLocal === "PENDING" &&
             "border-[#EF4444] hover:bg-[#E11D481A] "
           }${
-            defaultStatus === "DELIVERED" &&
+            statusLocal === "DELIVERED" &&
             " border-green-300 hover:bg-green-300/30 "
           }`}
         >
-          <p>{defaultStatus}</p>
+          <p>{statusLocal}</p>
           <ChevronsUpDown />
         </Button>
       </PopoverTrigger>

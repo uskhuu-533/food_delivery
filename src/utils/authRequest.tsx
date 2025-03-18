@@ -1,5 +1,6 @@
 import axios from "axios";
 const baseUrl = "https://food-service-cyan.vercel.app";
+// const baseUrl = "http://localhost:3000"
 export const login = async (form: { email: string; password: string }) => {
   try {
     const response = await axios.post(`${baseUrl}/users/login`, form, {
@@ -26,3 +27,19 @@ export const signUp = async (user:{ email: string; password: string }) => {
         
     }
 }
+
+export const getUserEmail = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(`${baseUrl}/users`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(response);
+    
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

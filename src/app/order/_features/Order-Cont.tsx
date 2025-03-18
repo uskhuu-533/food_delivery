@@ -143,7 +143,6 @@ const OrderCont = () => {
               <TableCell>{order.userData.address} </TableCell>
               <TableCell>
                 <ChangeOneStatus
-                  getOrders={getOrders}
                   orderId={order._id}
                   defaultStatus={order.status}
                 />

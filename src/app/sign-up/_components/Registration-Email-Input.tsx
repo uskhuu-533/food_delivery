@@ -1,36 +1,40 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
 type props = {
   setStep: (_step: number) => void;
-  setUser: (_user: User) => void;
-  user: User;
+  form : UseFormReturn<{
+    email: string;
+    password: string;
+    confirm: string;
+}, any, undefined>
 };
 type User = {
   email: string;
   password: string;
 };
 
-export const RegistrationEmailInput = ({ setStep, setUser, user }: props) => {
+
+export const RegistrationEmailInput = ({ setStep, form}: props) => {
   const [isEmailInvaild, setInvaild] = useState(false);
 
   const jumpToPassword = () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (regex.test(user.email)) {
+    if (regex.test(form.watch('email'))) {
       setStep(2);
     } else {
       setInvaild(true);
     }
   };
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInvaild(false);
-    setUser({ ...user, email: value });
-  };
+
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <button className="w-9 h-9 border border-[#E4E4E7] rounded-md flex items-center justify-center">
         <ChevronLeft />
       </button>
@@ -40,26 +44,28 @@ export const RegistrationEmailInput = ({ setStep, setUser, user }: props) => {
           Sign up to explore your favorite dishes
         </p>
       </div>
-      <div className="h-fit w-full flex flex-col gap-2">
-        <input
-          className={`h-9 pl-4 w-full border rounded-md`}
-          placeholder="Enter your email address"
-          onChange={(e) => handleChangeInput(e)}
-          value={user.email}
-          style={{ borderColor: isEmailInvaild === true ? "red" : "#71717A" }}
-        />
-        {isEmailInvaild === true && (
-          <label className="text-red-600 text-sm">
-            Invalid email. Use a format like example@email.com
-          </label>
-        )}
-      </div>
-      <button
+      <FormField 
+      control={form.control}
+      name="email"
+      render={({field})=>(
+        <FormItem>
+          <FormLabel></FormLabel>
+          <FormControl>
+            <Input 
+            type="email"
+            placeholder="Enter your email address"
+            {...field}/>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+      />
+      <Button
         onClick={jumpToPassword}
         className="py-[4px] w-full border rounded-md"
       >
         let&apos;s go
-      </button>
-    </>
+      </Button>
+    </div>
   );
 };

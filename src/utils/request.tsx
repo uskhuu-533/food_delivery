@@ -2,6 +2,7 @@ import axios from "axios";
 
  
 const URL = "https://food-service-cyan.vercel.app"  
+// const URL = "http://localhost:3000"
 type Food ={
   categoty: string;
   food_name: string;
