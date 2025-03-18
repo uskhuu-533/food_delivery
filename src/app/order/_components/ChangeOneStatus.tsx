@@ -20,7 +20,7 @@ const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
   const handleChangeStatus = async (status: string) => {
     setStatus(status)    
     const response = await changeStatus(orderId, status);
-    if (response?.status === 200) {
+    if (response?.status !== 200) {
       setStatus(defaultStatus)
     }
   };

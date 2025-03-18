@@ -1,3 +1,5 @@
+'use client'
+
 import ChangeStatus from "../_components/ChageStatus";
 import { DatePicker } from "../_components/DatePicker";
 
