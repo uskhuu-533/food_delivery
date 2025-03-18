@@ -39,7 +39,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <NuqsAdapter>
-              <AuthenticationProvider>{children} </AuthenticationProvider>
+              {/* <AuthenticationProvider> */}
+                {children}
+                 {/* </AuthenticationProvider> */}
             </NuqsAdapter>
           </ThemeProvider>
         </Suspense>
