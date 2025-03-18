@@ -1,13 +1,21 @@
-import Logo from "./icons/Logo"
-import LogoCont from "./Logo-Cont"
-import MenuContAdmin from "./MenuContAdmin"
+"use client";
+import { useTheme } from "next-themes";
+import LogoCont from "./Logo-Cont";
+import MenuContAdmin from "./MenuContAdmin";
+import { Button } from "./ui/button";
 
 const SideBar = () => {
-    return(
-        <div className="h-screen fixed bg-white dark:bg-black w-[205px] py-9 px-5 flex flex-col gap-10">
-           <LogoCont />
-           <MenuContAdmin />
-        </div>
-    )
-}
-export default SideBar
+  const { theme, setTheme } = useTheme();
+  return (
+    <div className="h-screen fixed bg-white dark:bg-black w-[205px] py-9 px-5 flex flex-col gap-10">
+      <LogoCont />
+      <MenuContAdmin />
+      {theme === "dark" ? (
+        <Button className="bg-white rounded-full" onClick={() => setTheme("light")}></Button>
+      ) : (
+        <Button className="bg-black rounded-full" onClick={() => setTheme("dark")}></Button>
+      )}
+    </div>
+  );
+};
+export default SideBar;
