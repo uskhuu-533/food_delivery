@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import axios from "axios";
+import { chaneManyStatus } from "@/utils/orderRequest";
 import { useState } from "react";
 type Props ={
     checkedOrders : string[]
@@ -23,14 +23,10 @@ const ChangeStatus =({checkedOrders, getOrders}:Props) => {
   
     const [status, setStatus] = useState('')
     const handleChangeStatus = async () => {
-        try {
-            const res = await axios.put(`http://localhost:3000/foodorder`, {ids : checkedOrders, status : status})
-            console.log(res);
-            getOrders()
-        } catch (error) {
-            console.log(error);
-            
-        }
+      const response = await chaneManyStatus(checkedOrders, status)
+      if (response?.status === 200) {
+        getOrders()
+      }
       };
     return(
         <Dialog>

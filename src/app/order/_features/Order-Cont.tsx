@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -20,6 +19,7 @@ import { PaginationComponent } from "@/components/Pagination";
 import { addDays } from "date-fns";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
 import { ChevronsUpDown } from "lucide-react";
+import { getOdrersReq } from "@/utils/orderRequest";
 type Order = {
   _id: string;
   userData: {
@@ -57,24 +57,9 @@ const OrderCont = () => {
     to: new Date(),
   });
   const getOrders = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/foodorder/admin/${page}`,
-        {
-          params: {
-            startDate: date.from.toISOString(),
-            endDate: date.to.toISOString(),
-          },
-        }
-      );
-      console.log(response);
-      setData({
-        orders: response.data.data,
-        totalPages: response.data.totalPage,
-        totalResults: response.data.totalResults,
-      });
-    } catch (error) {
-      console.log(error);
+    const data: Data | undefined = await getOdrersReq(page, date);
+    if (data) {
+      setData(data);
     }
   };
   useEffect(() => {
@@ -95,11 +80,12 @@ const OrderCont = () => {
     }
   };
   const sortOrderByStatus = () => {
-    const sortedOrder = data.orders.sort((a, b)=>b.status.localeCompare(a.status))
+    const sortedOrder = data.orders.sort((a, b) =>
+      b.status.localeCompare(a.status)
+    );
     console.log(sortedOrder);
-    setData({...data, orders:sortedOrder})
-
-  }
+    setData({ ...data, orders: sortedOrder });
+  };
   return (
     <div className="ml-[200px] px-8 w-full py-10">
       <Avatar />
@@ -130,8 +116,9 @@ const OrderCont = () => {
             </TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Delivery address</TableHead>
-            <TableHead className="justify-between flex items-center">Delivery status
-              <ChevronsUpDown onClick={sortOrderByStatus} size={16}/>
+            <TableHead className="justify-between flex items-center">
+              Delivery status
+              <ChevronsUpDown onClick={sortOrderByStatus} size={16} />
             </TableHead>
           </TableRow>
         </TableHeader>

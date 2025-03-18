@@ -6,28 +6,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { changeStatus } from "@/utils/orderRequest";
 import { PopoverClose } from "@radix-ui/react-popover";
-import axios from "axios";
 import { ChevronsUpDown } from "lucide-react";
 
 type Props = {
   defaultStatus: string;
   orderId: string;
-  getOrders() : Promise<void>
+  getOrders(): Promise<void>;
 };
 const ChangeOneStatus = ({ defaultStatus, orderId, getOrders }: Props) => {
   const handleChangeStatus = async (status: string) => {
-    try {
-      const res = await axios.put(
-        `http://localhost:3000/foodorder/${orderId}`,
-        { status: status }
-      );
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }finally{
-        getOrders()
+    const response = await changeStatus(orderId, status);
+    if (response?.status === 200) {
+      getOrders();
     }
+    getOrders();
   };
   return (
     <Popover>

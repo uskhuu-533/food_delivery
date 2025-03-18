@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import axios from "axios"
 import AddNewFood from "../_components/AddFood";
 import EditFood from "../_components/EditFood";
+import { getFoods } from "@/utils/request";
 type props = {
   category: Response;
-  categories : Response[]
+  categories: Response[];
 };
 type Response = {
   title: string;
@@ -18,32 +17,25 @@ type Food = {
   price: number;
   food_description: string;
   food_image: string | null;
-  category: string;
-  _id : object
+  category: Response;
+  _id: string;
 };
-const CategoryFoods = ({ category, categories}: props) => {
-  const [foods, setFoods] = useState([])
+const CategoryFoods = ({ category, categories }: props) => {
+  const [foods, setFoods] = useState([]);
 
-  const getFood = async () =>{
-    try{
-  
-      const response = await axios.get(`http://localhost:3000/food/${category._id}`)  
-      setFoods(response.data)
-    }catch(error){
-      console.log(error);
-      
-    }
-  }
-  useEffect(()=> {
-    getFood()
-  },[])
+  const getFood = async () => {
+    const food = await getFoods(category._id);
+    setFoods(food);
+  };
+  useEffect(() => {
+    getFood();
+  }, []);
 
   return (
     <div className="w-full h-fit rounded-md p-6 bg-white flex flex-col gap-3">
       <p>{category.title}</p>
       <div className="flex flex-wrap gap-6">
-        
-        <AddNewFood category={category} getFood={getFood}/>
+        <AddNewFood category={category} getFood={getFood} />
         {foods.map((food: Food, index) => (
           <div
             key={index}
@@ -55,7 +47,7 @@ const CategoryFoods = ({ category, categories}: props) => {
                 alt="food"
                 className="w-full scale-100"
               />
-              <EditFood getFood={getFood}  food={food} categories={categories}/>
+              <EditFood getFood={getFood} food={food} categories={categories} />
             </div>
             <div className="w-full flex justify-between">
               <p>{food.food_name}</p>

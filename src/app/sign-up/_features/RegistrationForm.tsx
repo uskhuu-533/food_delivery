@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RegistrationEmailInput } from "../_components/Registration-Email-Input";
 import { RegistrationPasswordInput } from "../_components/Registration-Password-Input";
+import { signUp } from "@/utils/authRequest";
 
 type User = {
   email: string;
@@ -17,27 +18,10 @@ const RegistrationForm = () => {
   };
 
   const postUser = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-
-      const text = await response.text();
-      console.log("Response status:", response.status);
-      console.log("Response text:", text);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-    } catch (err) {
-      console.error("Error posting user:", err);
-    } finally {
-      router.push(`/login`);
-    }
+   const data = await signUp(user)
+   if (data?.status === 200) {
+    router.push('/login')
+   }
   };
 
   return (

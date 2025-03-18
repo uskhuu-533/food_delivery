@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import axios from "axios";
 import AddCategory from "../_components/AddCategory";
 import Avatar from "../../components/Avatar";
+import { getAllFood } from "@/utils/request";
 type Response = {
   title: string;
   food_count: Array<foods>;
@@ -18,7 +17,7 @@ type foods = {
   _id: object;
 };
 type Props = {
-  fetchCategory: Function;
+  fetchCategory(): Promise<void>;
   categories: Response[];
 };
 
@@ -26,13 +25,8 @@ const FoodMenuHeader = ({ fetchCategory, categories }: Props) => {
   const [foods, setFoods] = useState([]);
 
   const getAllFoods = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/food`);
-      console.log(response);
-      setFoods(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+    const allFood = await getAllFood()
+    setFoods(allFood)
   };
   useEffect(() => {
     getAllFoods();

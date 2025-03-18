@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import { login } from "@/utils/authRequest";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,20 +23,11 @@ const Login = () => {
     setFrom({ ...form, password: value });
   };
   const checkPassword = async () => {
-    try {
-      const response = await axios.post("http://localhost:3000/users/login",form ,{
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    
-console.log(response);
-
-      localStorage.setItem("token", response.data);
-      router.push("/");
-    } catch (err) {
-      console.error("Error posting user:", err);
-    }
+      const data = await login(form)
+      if (data?.status === 200){
+        localStorage.setItem("token", data.data)
+        router.push('/')
+      }
   };
   const jumpToHome = () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

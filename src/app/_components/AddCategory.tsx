@@ -10,11 +10,12 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 type Props = {
-  fetchCategory: Function;
+  fetchCategory(): Promise<void>;
 };
 const AddCategory = ({ fetchCategory }: Props) => {
   const [newCategory, setNewCategory] = useState({ title: "" });
@@ -23,21 +24,7 @@ const AddCategory = ({ fetchCategory }: Props) => {
       return 
     }
     try {
-      const response = await fetch("http://localhost:3000/category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCategory),
-      });
-
-      const text = await response.text();
-      console.log("Response status:", response.status);
-      console.log("Response text:", text);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      await PostCategory(newCategory)
       fetchCategory();
     } catch (err) {
       console.error("Error posting user:", err);

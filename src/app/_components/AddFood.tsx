@@ -3,21 +3,12 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { uploadImage } from "@/utils/image-upload";
-import { DialogClose, DialogDescription } from "@radix-ui/react-dialog";
-import axios from "axios";
-import { Plus, X } from "lucide-react";
-import { useState } from "react";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { Plus } from "lucide-react";
 import FormHook from "./FormHook";
 
 type Props = {

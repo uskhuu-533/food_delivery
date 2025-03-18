@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { uploadImage } from "@/utils/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
+import { addFood } from "@/utils/request";
+import { DialogClose } from "@/components/ui/dialog";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -41,18 +41,14 @@ const FormHook = ({ category, getFood }: Props) => {
     if (image) {
       try {
         setLoading(true);
-        const imageUploadRes = await uploadImage(image);
+        const imageUploadRes:string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
           price: values.price,
           food_description: values.food_description,
           food_image: imageUploadRes,
         };
-        const response = await axios.post(
-          `http://localhost:3000/food/${category}`,
-          foodData
-        );
-        console.log(response);
+        await addFood(foodData, category)
       } catch (error) {
         console.log(error);
       } finally {
@@ -86,7 +82,7 @@ const FormHook = ({ category, getFood }: Props) => {
           label="Ingredients"
         />
         <ImageInput setImage={setImage} image={image} defaultPreview={null} />
-        <Button type="submit">Submit</Button>
+        <DialogClose  className="bg-black text-white px-4 py-2 rounded-md"  type="submit">Submit</DialogClose>
       </form>
     </FormProvider>
   );

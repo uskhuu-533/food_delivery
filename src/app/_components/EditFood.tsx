@@ -18,9 +18,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
+import { putFood } from "@/utils/request";
 type Props = {
   food: Food;
-  getFood: Function;
+  getFood(): Promise<void>;
   categories: Response[];
 };
 type Food = {
@@ -29,7 +30,7 @@ type Food = {
   food_description: string;
   food_image: string | null;
   category: Response;
-  _id: object;
+  _id: string;
 };
 type Response = {
   title: string;
@@ -73,11 +74,7 @@ const EditFood = ({ food, getFood, categories }: Props) => {
         food_description: values.food_description,
         food_image: foodImage,
       };
-        const response = await axios.put(
-          `http://localhost:3000/food/${food._id}/${foodData.categoty}`,
-          foodData
-        );
-        console.log(response);
+      await putFood(foodData, foodData.categoty, food._id)
         getFood()
     } catch (error) {
       console.log(error);
@@ -159,23 +156,4 @@ const EditFood = ({ food, getFood, categories }: Props) => {
 };
 export default EditFood;
 
-{
-  /* <div className="grid grid-cols-4 items-center gap-4">
-<label htmlFor="username" className="text-right">
-  Category
-</label>
-<select
-  name="category"
-  value={editedFood.category}
-  onChange={(e) =>
-    setEditedFood({ ...editedFood, category: e.target.value })
-  }
->
-  {categories.map((category: Response, index) => (
-    <option key={index} value={category._id}>
-      {category.title}
-    </option>
-  ))}
-</select>
-</div> */
-}
+
