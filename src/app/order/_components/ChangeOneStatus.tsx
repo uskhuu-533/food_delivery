@@ -16,23 +16,18 @@ type Props = {
   orderId: string;
 };
 const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
-  const [statusLocal, setStatus] = useState(defaultStatus)
   const handleChangeStatus = async (status: string) => {
-    setStatus(status)    
-    const response = await changeStatus(orderId, status);
-    if (response?.status !== 200) {
-      setStatus(defaultStatus)
-    }
+    await changeStatus(orderId, status);
   };
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           className={`rounded-full bg-inherit text-black border ${
-            statusLocal === "PENDING" &&
+            defaultStatus === "PENDING" &&
             "border-[#EF4444] hover:bg-[#E11D481A] "
           }${
-            statusLocal === "DELIVERED" &&
+            defaultStatus === "DELIVERED" &&
             " border-green-300 hover:bg-green-300/30 "
           }`}
         >
