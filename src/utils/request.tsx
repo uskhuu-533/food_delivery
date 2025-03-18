@@ -15,7 +15,7 @@ type food = {
   food_description: string;
   food_image: string;
 }
- export   const fetchCategory = async () => {
+ export   const fetchCategories = async () => {
     try {
       const response = await fetch(`${URL}/category`);
       const results = await response.json();

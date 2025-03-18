@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import CategoryFoods from "./Category-Foods"
 import FoodMenuHeader from "@/app/_features/Food-Menu-Header";
+import { fetchCategories } from "@/utils/request";
 
 type Response = {
     title : string,
@@ -22,15 +23,8 @@ const AdminCont = () => {
       const [categories, setCategory] = useState<Response[]>([]);
  
      const fetchCategory = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/category`);
-          const results = await response.json();
-          console.log(results);
-          
-          setCategory(results);
-        } catch (err) {
-          console.log(err);
-        }
+       const data = await fetchCategories()
+       setCategory(data)
       };
       useEffect(() => {
         fetchCategory();

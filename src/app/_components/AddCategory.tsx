@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Plus, X } from "lucide-react";
+import { Plus} from "lucide-react";
 import { useState } from "react";
 type Props = {
   fetchCategory(): Promise<void>;
