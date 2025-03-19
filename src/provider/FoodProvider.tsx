@@ -32,9 +32,8 @@ type Food = {
     const [loadingFood, setLoadingFood] = useState(false);
   
     const getFood = async () => {
-      const data = await getFoods(categoryId);
+      const data = await getFoods(categoryId, setLoadingFood);
       setFoods(data);
-      setLoadingFood(false);
     };
   
     useEffect(() => {

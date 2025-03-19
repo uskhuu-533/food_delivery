@@ -50,8 +50,8 @@ const FormHook = ({ category}: Props) => {
           food_description: values.food_description,
           food_image: imageUploadRes,
         };
-        await addFood(foodData, category)
-        getFood()
+        await addFood(foodData, category, getFood)
+        
       } catch (error) {
         console.log(error);
       } 

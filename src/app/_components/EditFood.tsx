@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { uploadImage } from "@/utils/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2, Trash, X } from "lucide-react";
@@ -29,7 +29,7 @@ type Food = {
   price: number;
   food_description: string;
   food_image: string | null;
-  category: {_id :string, title :string }
+  category: { _id: string; title: string };
   _id: string;
 };
 
@@ -45,10 +45,9 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "category " }),
 });
 const EditFood = ({ food }: Props) => {
-  const {getFood} = useFood()
+  const { getFood, setLoadingFood } = useFood();
   const [image, setImage] = useState<File | undefined>(undefined);
-  const {categories} = useCategory()
-  const [loading, setLoading] = useState(false);
+  const { categories } = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,7 +60,7 @@ const EditFood = ({ food }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setLoading(true);
+      setLoadingFood(true);
       let foodImage = food.food_image;
       if (image) {
         foodImage = await uploadImage(image);
@@ -73,13 +72,18 @@ const EditFood = ({ food }: Props) => {
         food_description: values.food_description,
         food_image: foodImage,
       };
-      await putFood(foodData, foodData.categoty, food._id)
-        getFood()
+      await putFood(foodData, foodData.categoty, food._id);
+      getFood();
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      getFood();
     }
+  };
+  const handleDeleteFood = async () => {
+    setLoadingFood(true);
+    await deleteFood(food._id);
+    getFood();
   };
   return (
     <Dialog>
@@ -130,17 +134,20 @@ const EditFood = ({ food }: Props) => {
               image={image}
               setImage={setImage}
             />
-            <Button onClick={()=>deleteFood(food._id, getFood)}>
-              <Trash />
-            </Button>
-            <DialogClose  className="bg-black text-white px-4 py-2 rounded-md"  type="submit">Submit</DialogClose>
+            <DialogClose
+              className="bg-black text-white px-4 py-2 rounded-md"
+              type="submit"
+            >
+              Submit
+            </DialogClose>
           </form>
         </FormProvider>
+        <Button onClick={handleDeleteFood}>
+          <Trash />
+        </Button>
         <DialogFooter className="flex justify-between"></DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 export default EditFood;
-
-
