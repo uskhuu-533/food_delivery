@@ -1,8 +1,9 @@
 import axios from "axios";
 
  
-const URL = "https://food-service-cyan.vercel.app"  
-// const URL = "http://localhost:3000"
+// const URL = "https://food-service-cyan.vercel.app"  //vercel
+// const URL = "http://localhost:3000" //local
+const URL = "https://food-backend-8ud7.onrender.com" //render
 type Food ={
   categoty: string;
   food_name: string;
