@@ -3,30 +3,16 @@ import { useEffect, useState } from "react";
 import AddCategory from "../_components/AddCategory";
 import Avatar from "../../components/Avatar";
 import { getAllFood } from "@/utils/request";
-type Response = {
-  title: string;
-  food_count: Array<foods>;
-  _id: string;
-};
-type foods = {
-  food_name: string;
-  price: string;
-  food_description: string;
-  food_image: string | null;
-  category: string;
-  _id: object;
-};
-type Props = {
-  fetchCategory(): Promise<void>;
-  categories: Response[];
-};
+import { useCategory } from "@/provider/CategoryProvider";
 
-const FoodMenuHeader = ({ fetchCategory, categories }: Props) => {
+
+const FoodMenuHeader = () => {
   const [foods, setFoods] = useState([]);
-
+const { categories, setLoading} = useCategory()
   const getAllFoods = async () => {
     const allFood = await getAllFood()
     setFoods(allFood)
+    console.log('aa');
   };
   useEffect(() => {
     getAllFoods();
@@ -44,7 +30,7 @@ const FoodMenuHeader = ({ fetchCategory, categories }: Props) => {
               {foods.length}
             </div>
           </button>
-          {categories?.map((category: Response, index) => (
+          {categories?.map((category, index) => (
             <button
               key={index}
               className="flex px-4 py-2 rounded-full text-black items-center border gap-2"
@@ -55,7 +41,7 @@ const FoodMenuHeader = ({ fetchCategory, categories }: Props) => {
               </div>
             </button>
           ))}
-          <AddCategory fetchCategory={fetchCategory} />
+          <AddCategory />
         </div>
       </div>
     </div>

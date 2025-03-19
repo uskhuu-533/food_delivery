@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useOrder } from "@/provider/OrderProvider";
 import { changeStatus } from "@/utils/orderRequest";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ChevronsUpDown } from "lucide-react";
@@ -14,9 +15,9 @@ import { useState } from "react";
 type Props = {
   defaultStatus: string;
   orderId: string;
-  getOrders() : Promise<void> 
 };
-const ChangeOneStatus = ({ defaultStatus, orderId, getOrders }: Props) => {
+const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
+  const { getOrders } = useOrder()
   const handleChangeStatus = async (status: string) => {
     await changeStatus(orderId, status);
     getOrders()

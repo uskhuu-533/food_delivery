@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import AddNewFood from "../_components/AddFood";
 import EditFood from "../_components/EditFood";
 import { getFoods } from "@/utils/request";
+import { useFood } from "@/provider/FoodProvider";
+import FoodLoader from "@/components/FoodLoader";
 type props = {
   category: Response;
-  categories: Response[];
+
 };
 type Response = {
   title: string;
@@ -20,23 +22,17 @@ type Food = {
   category: Response;
   _id: string;
 };
-const CategoryFoods = ({ category, categories }: props) => {
-  const [foods, setFoods] = useState([]);
 
-  const getFood = async () => {
-    const food = await getFoods(category._id);
-    setFoods(food);
-  };
-  useEffect(() => {
-    getFood();
-  }, []);
+const CategoryFoods = ({ category }: props) => {
+  const {foods} = useFood()
 
   return (
     <div className="w-full h-fit rounded-md p-6 bg-white flex flex-col gap-3">
+      <FoodLoader text="Adding new food"/>
       <p>{category.title}</p>
       <div className="flex flex-wrap gap-6">
-        <AddNewFood category={category} getFood={getFood} />
-        {foods.map((food: Food, index) => (
+        <AddNewFood category={category} />
+        {foods.map((food:Food , index) => (
           <div
             key={index}
             className="w-[271px] h-[257px] rounded-md border-[#EF4444] border flex flex-col p-4"
@@ -47,7 +43,7 @@ const CategoryFoods = ({ category, categories }: props) => {
                 alt="food"
                 className="w-full scale-100"
               />
-              <EditFood getFood={getFood} food={food} categories={categories} />
+              <EditFood  food={food}/>
             </div>
             <div className="w-full flex justify-between">
               <p>{food.food_name}</p>

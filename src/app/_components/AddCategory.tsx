@@ -10,20 +10,18 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useCategory } from "@/provider/CategoryProvider";
 import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Plus} from "lucide-react";
 import { useState } from "react";
-type Props = {
-  fetchCategory(): Promise<void>;
-};
-const AddCategory = ({ fetchCategory }: Props) => {
+
+const AddCategory = () => {
+  const {fetchCategory, setLoading} = useCategory()
   const [newCategory, setNewCategory] = useState({ title: "" });
   const addNewCategory = async () => {
-    if(newCategory.title.length === 0){
-      return 
-    }
     try {
+      setLoading(true)
       await PostCategory(newCategory)
       fetchCategory();
     } catch (err) {

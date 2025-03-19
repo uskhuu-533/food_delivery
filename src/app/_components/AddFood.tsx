@@ -13,21 +13,15 @@ import FormHook from "./FormHook";
 
 type Props = {
   category: Response;
-  getFood(): Promise<void>;
+
 };
 type Response = {
   title: string;
   _id: string;
 };
-type newfood = {
-  food_name: string;
-  price: string;
-  food_description: string;
-  food_image: string;
-  category: string;
-};
 
-const AddNewFood = ({ category, getFood }: Props) => {
+
+const AddNewFood = ({ category }: Props) => {
   return (
     <div className="w-[271px] h-[257px] rounded-md border-[#EF4444] border-2 border-dashed flex gap-6 items-center justify-center">
       <Dialog>
@@ -45,7 +39,7 @@ const AddNewFood = ({ category, getFood }: Props) => {
               Add new Dish to Appetizers
             </DialogTitle>
           </DialogHeader>
-          <FormHook category={category._id} getFood={getFood} />
+          <FormHook category={category._id}  />
 
           <DialogDescription></DialogDescription>
         </DialogContent>

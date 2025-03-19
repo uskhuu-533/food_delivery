@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,12 +14,10 @@ import {
 import Avatar from "../../../components/Avatar";
 import OrderFoodDetai from "../_components/OrderFoodDetail";
 import OrderHeader from "./Order-Header";
-import { useQueryState, parseAsInteger } from "nuqs";
 import { PaginationComponent } from "@/components/Pagination";
-import { addDays } from "date-fns";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
 import { ChevronsUpDown } from "lucide-react";
-import { getOdrersReq } from "@/utils/orderRequest";
+import { useOrder } from "@/provider/OrderProvider";
 type Order = {
   _id: string;
   userData: {
@@ -45,26 +43,8 @@ type DateType = {
   to: Date;
 };
 const OrderCont = () => {
-  const [data, setData] = useState<Data>({
-    orders: [],
-    totalPages: 1,
-    totalResults: 0,
-  });
+  const { data, setData } = useOrder();
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-  const [date, setDate] = useState<DateType>({
-    from: addDays(new Date(), -20),
-    to: new Date(),
-  });
-  const getOrders = async () => {
-    const data: Data | undefined = await getOdrersReq(page, date);
-    if (data) {
-      setData(data);
-    }
-  };
-  useEffect(() => {
-    getOrders();
-  }, [page, date]);
   const handleCheckBox = (id: string) => {
     if (checkedBox.includes(id)) {
       setCheckedBox((prev) => prev.filter((item) => item !== id));
@@ -87,15 +67,9 @@ const OrderCont = () => {
     setData({ ...data, orders: sortedOrder });
   };
   return (
-    <div className="ml-[200px] px-8 w-full py-10">
+    <div className="px-8 w-full py-10">
       <Avatar />
-      <OrderHeader
-        date={date}
-        checkedBox={checkedBox}
-        totalResults={data.totalResults}
-        getOrders={getOrders}
-        setDate={setDate}
-      />
+      <OrderHeader checkedBox={checkedBox} />
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -145,7 +119,6 @@ const OrderCont = () => {
                 <ChangeOneStatus
                   orderId={order._id}
                   defaultStatus={order.status}
-                  getOrders={getOrders}
                 />
               </TableCell>
             </TableRow>

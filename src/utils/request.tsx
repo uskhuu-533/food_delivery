@@ -2,8 +2,8 @@ import axios from "axios";
 
  
 // const URL = "https://food-service-cyan.vercel.app"  //vercel
-// const URL = "http://localhost:3000" //local
-const URL = "https://food-backend-8ud7.onrender.com" //render
+const URL = "http://localhost:3000" //local
+// const URL = "https://food-backend-8ud7.onrender.com" //render
 type Food ={
   categoty: string;
   food_name: string;
@@ -21,6 +21,8 @@ type food = {
     try {
       const response = await fetch(`${URL}/category`);
       const results = await response.json();
+      console.log(results);
+      
      return results
     } catch (err) {
       console.log(err);
@@ -80,3 +82,16 @@ export const getAllFood = async () => {
     
   }
 } 
+
+export const deleteFood = async (foodId : string, getFood: ()=> void) => {
+  try {
+    const response = await axios.delete(
+      `${URL}/food/${foodId}`
+    );
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    getFood();
+  }
+}

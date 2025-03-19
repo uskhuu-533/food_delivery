@@ -9,17 +9,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-type Props = { 
-  setDate : (date: DateType)=> void
-  date : DateType
-  getOrders() : Promise<void>
-}
-type DateType ={
-  to : Date
-  from : Date
-}
-export function DatePicker({setDate, date, getOrders}:Props) {
-  
+import { useOrder } from "@/provider/OrderProvider";
+
+export function DatePicker() {
+  const {setDate, getOrders, date} = useOrder()
   
   const handleFromDateChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const newFromDate = new Date(e.target.value);

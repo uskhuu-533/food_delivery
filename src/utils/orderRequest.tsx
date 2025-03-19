@@ -1,8 +1,8 @@
 import axios from "axios"
 
 // const baseUrl = "https://food-service-cyan.vercel.app"
-// const baseUrl = "http://localhost:3000"
-const baseUrl = "https://food-backend-8ud7.onrender.com"
+const baseUrl = "http://localhost:3000"
+// const baseUrl = "https://food-backend-8ud7.onrender.com"
 
 export const getOdrersReq = async (page:number, date:{from:Date, to:Date}) => {
     try {

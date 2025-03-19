@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,31 +12,27 @@ import {
 
 import { uploadImage } from "@/utils/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { Edit2, Trash, X } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
-import { putFood } from "@/utils/request";
+import { deleteFood, putFood } from "@/utils/request";
+import { useCategory } from "@/provider/CategoryProvider";
+import { useFood } from "@/provider/FoodProvider";
 type Props = {
   food: Food;
-  getFood(): Promise<void>;
-  categories: Response[];
 };
 type Food = {
   food_name: string;
   price: number;
   food_description: string;
   food_image: string | null;
-  category: Response;
+  category: {_id :string, title :string }
   _id: string;
 };
-type Response = {
-  title: string;
-  _id: string;
-};
+
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
   price: z
@@ -47,8 +44,10 @@ const formSchema = z.object({
     .min(1, { message: "Field ingredients are required." }),
   category: z.string().min(1, { message: "category " }),
 });
-const EditFood = ({ food, getFood, categories }: Props) => {
+const EditFood = ({ food }: Props) => {
+  const {getFood} = useFood()
   const [image, setImage] = useState<File | undefined>(undefined);
+  const {categories} = useCategory()
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,18 +79,6 @@ const EditFood = ({ food, getFood, categories }: Props) => {
       console.log(error);
     } finally {
       setLoading(false);
-    }
-  };
-  const deleteFood = async () => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/food/${food._id}`
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      getFood();
     }
   };
   return (
@@ -143,10 +130,10 @@ const EditFood = ({ food, getFood, categories }: Props) => {
               image={image}
               setImage={setImage}
             />
-            <Button onClick={deleteFood}>
+            <Button onClick={()=>deleteFood(food._id, getFood)}>
               <Trash />
             </Button>
-            <Button type="submit">Save changes</Button>
+            <DialogClose  className="bg-black text-white px-4 py-2 rounded-md"  type="submit">Submit</DialogClose>
           </form>
         </FormProvider>
         <DialogFooter className="flex justify-between"></DialogFooter>

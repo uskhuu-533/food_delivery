@@ -9,6 +9,7 @@ import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
 import { addFood } from "@/utils/request";
 import { DialogClose } from "@/components/ui/dialog";
+import { useFood } from "@/provider/FoodProvider";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -23,11 +24,12 @@ const formSchema = z.object({
 });
 type Props = {
   category: string;
-  getFood(): Promise<void>;
+
 };
-const FormHook = ({ category, getFood }: Props) => {
+const FormHook = ({ category}: Props) => {
+  const {getFood , setLoadingFood} = useFood()
   const [image, setImage] = useState<File | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +42,7 @@ const FormHook = ({ category, getFood }: Props) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (image) {
       try {
-        setLoading(true);
+        setLoadingFood(true);
         const imageUploadRes:string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
@@ -49,12 +51,10 @@ const FormHook = ({ category, getFood }: Props) => {
           food_image: imageUploadRes,
         };
         await addFood(foodData, category)
+        getFood()
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
-        getFood();
-      }
+      } 
     }
   };
   return (
