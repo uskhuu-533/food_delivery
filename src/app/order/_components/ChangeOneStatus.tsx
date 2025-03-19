@@ -1,5 +1,6 @@
 "use client";
 
+import StatusLoader from "@/components/StautusLoader";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -18,9 +19,17 @@ type Props = {
 };
 const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
   const { getOrders } = useOrder()
+  const [loading, setLoading]= useState(false)
   const handleChangeStatus = async (status: string) => {
-    await changeStatus(orderId, status);
-    getOrders()
+    setLoading(true);
+    try {
+      await changeStatus(orderId, status);
+      await getOrders();
+    } catch (error) {
+      console.error("Failed to change status:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <Popover>
@@ -34,7 +43,7 @@ const ChangeOneStatus = ({ defaultStatus, orderId }: Props) => {
             " border-green-300 hover:bg-green-300/30 "
           }`}
         >
-          <p>{defaultStatus}</p>
+          <div>{loading ? <StatusLoader/>:defaultStatus}</div>
           <ChevronsUpDown />
         </Button>
       </PopoverTrigger>

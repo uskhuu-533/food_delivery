@@ -1,5 +1,4 @@
 import { useCategory } from "@/provider/CategoryProvider"
-import { useLoading } from "@/provider/LoaderProvider"
 import Logo from "./icons/Logo"
 
 type Props = {

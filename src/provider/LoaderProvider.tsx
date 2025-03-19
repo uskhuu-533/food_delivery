@@ -6,7 +6,7 @@ type LoadingContexType = {
     loading : boolean,
     setLoading : (loading : boolean) => void
 }
-const LoadingContext = createContext<LoadingContexType | null>(null);
+const LoadingContext = createContext<LoadingContexType | undefined>(undefined);
 
 export const LoadingProvider = ({ children }:{children : ReactNode}) => {
   const [loading, setLoading] = useState(false);

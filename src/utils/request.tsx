@@ -3,6 +3,8 @@ import axios from "axios";
 // const URL = "https://food-service-cyan.vercel.app"  //vercel
 // const URL = "http://localhost:3000"; //local
 const URL = "https://food-backend-8ud7.onrender.com" //render
+console.log(process.env.NEXT_PUBLIC_BASE_URL);
+
 type Food = {
   categoty: string;
   food_name: string;

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -17,9 +18,10 @@ type Props = {
   checkedOrders: string[];
 };
 const ChangeStatus = ({ checkedOrders }: Props) => {
-  const { getOrders } = useOrder();
+  const { getOrders, setLoadingOrder } = useOrder();
   const [status, setStatus] = useState("");
   const handleChangeStatus = async () => {
+    setLoadingOrder(true)
     await chaneManyStatus(checkedOrders, status);
     getOrders();
   };
@@ -69,13 +71,13 @@ const ChangeStatus = ({ checkedOrders }: Props) => {
         </div>
         <div>{checkedOrders.length} selected</div>
         <DialogFooter>
-          <Button
+          <DialogClose
             type="submit"
-            className="w-full rounded-full"
+            className="bg-black text-white px-4 py-2 rounded-md"
             onClick={handleChangeStatus}
           >
             Save changes
-          </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

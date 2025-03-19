@@ -44,6 +44,8 @@ type OrderProviderType = {
   date : DateType
   setData : (_data : Data) => void
   setDate : (_date : DateType) => void
+  statusLoading : boolean
+  setStatusLoading : (statusLoading:boolean) => void
 };
 
 const OrderContext = createContext<OrderProviderType | null>(null);
@@ -64,13 +66,15 @@ export const OrderProvider = ({
     to: new Date(),
   });
   const [loadingOrder, setLoadingOrder] = useState(false);
-
+  const [statusLoading, setStatusLoading] = useState(false) 
   const getOrders = async () => {
     const data: Data | undefined = await getOdrersReq(page, date);
     if (data) {
       setData(data);
+      setLoadingOrder(false);
+      setStatusLoading(false)
     }
-    setLoadingOrder(false);
+    
   };
 
   useEffect(() => {
@@ -79,7 +83,7 @@ export const OrderProvider = ({
 
   return (
     <OrderContext.Provider
-      value={{ data, date, getOrders, loadingOrder, setLoadingOrder, setData, setDate }}
+      value={{ data, date, getOrders, loadingOrder, setLoadingOrder, setData, setDate , setStatusLoading, statusLoading}}
     >
       {children}
     </OrderContext.Provider>
