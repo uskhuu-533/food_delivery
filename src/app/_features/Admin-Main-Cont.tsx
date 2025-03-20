@@ -21,7 +21,7 @@ type foods = {
 };
 
 const AdminCont = () => {
-  const { categories, loading } = useCategory();
+  const { categories } = useCategory();
 
   return (
     <>
@@ -34,7 +34,7 @@ const AdminCont = () => {
             </FoodProvider>
           ))}
         </div>
-          <ScreenLoader text="Adding new category"/>
+          <ScreenLoader/>
       </div>
     </>
   );

@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import AddNewFood from "../_components/AddFood";
 import EditFood from "../_components/EditFood";
-import { getFoods } from "@/utils/request";
 import { useFood } from "@/provider/FoodProvider";
-import FoodLoader from "@/components/FoodLoader";
 type props = {
   category: Response;
 
@@ -28,7 +25,6 @@ const CategoryFoods = ({ category }: props) => {
 
   return (
     <div className="w-full h-fit rounded-md p-6 bg-white flex flex-col gap-3">
-      <FoodLoader text="Adding new food"/>
       <p>{category.title}</p>
       <div className="flex flex-wrap gap-6">
         <AddNewFood category={category} />

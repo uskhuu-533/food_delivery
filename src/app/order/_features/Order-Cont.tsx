@@ -18,7 +18,6 @@ import { PaginationComponent } from "@/components/Pagination";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
 import { ChevronsUpDown } from "lucide-react";
 import { useOrder } from "@/provider/OrderProvider";
-import OrderLoading from "@/components/OrderLoading";
 type Order = {
   _id: string;
   userData: {
@@ -69,7 +68,7 @@ const OrderCont = () => {
   };
   return (
     <div className="px-8 w-full py-10">
-      <OrderLoading />
+  
       <Avatar />
       <OrderHeader checkedBox={checkedBox} />
       <Table>

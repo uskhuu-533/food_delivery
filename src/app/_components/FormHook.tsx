@@ -10,6 +10,7 @@ import ImageInput from "./ImageInput";
 import { addFood } from "@/utils/request";
 import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
+import { useLoading } from "@/provider/LoaderProvider";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -27,7 +28,8 @@ type Props = {
 
 };
 const FormHook = ({ category}: Props) => {
-  const {getFood , setLoadingFood} = useFood()
+  const {getFood} = useFood()
+  const {setLoading} = useLoading()
   const [image, setImage] = useState<File | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +44,7 @@ const FormHook = ({ category}: Props) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (image) {
       try {
-        setLoadingFood(true);
+        setLoading(true);
         const imageUploadRes:string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
@@ -50,11 +52,13 @@ const FormHook = ({ category}: Props) => {
           food_description: values.food_description,
           food_image: imageUploadRes,
         };
-        await addFood(foodData, category, getFood)
-        
+        await addFood(foodData, category)
+        await getFood()
       } catch (error) {
         console.log(error);
-      } 
+      } finally{
+        setLoading(false)
+      }
     }
   };
   return (

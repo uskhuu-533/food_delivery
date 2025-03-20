@@ -11,19 +11,22 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useCategory } from "@/provider/CategoryProvider";
+import { useLoading } from "@/provider/LoaderProvider";
 import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Plus} from "lucide-react";
 import { useState } from "react";
 
 const AddCategory = () => {
-  const {fetchCategory, setLoading} = useCategory()
+  const {fetchCategory} = useCategory()
+  const {setLoading} = useLoading()
   const [newCategory, setNewCategory] = useState({ title: "" });
   const addNewCategory = async () => {
     try {
       setLoading(true)
       await PostCategory(newCategory)
-      fetchCategory();
+      await fetchCategory();
+      setLoading(false)
     } catch (err) {
       console.error("Error posting user:", err);
     }

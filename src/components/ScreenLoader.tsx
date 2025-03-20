@@ -1,17 +1,16 @@
-import { useCategory } from "@/provider/CategoryProvider"
-import Logo from "./icons/Logo"
+'use client'
 
-type Props = {
-    text:string
-}
-const ScreenLoader = ({text}:Props) => {
-    const {loading } = useCategory()
+import Logo from "./icons/Logo"
+import { useLoading } from "@/provider/LoaderProvider"
+
+const ScreenLoader = () => {
+    const {loading } = useLoading()
     if (!loading) return null; 
     return(
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
         <div className="bg-white py-8 px-20 rounded-xl flex flex-col items-center gap-2" role="status">
             <Logo />
-            <p>{text}...</p>
+            <p>Loading...</p>
           <svg
             aria-hidden="true"
             className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-black"

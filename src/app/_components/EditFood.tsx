@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,7 @@ import ImageInput from "./ImageInput";
 import { deleteFood, putFood } from "@/utils/request";
 import { useCategory } from "@/provider/CategoryProvider";
 import { useFood } from "@/provider/FoodProvider";
+import { useLoading } from "@/provider/LoaderProvider";
 type Props = {
   food: Food;
 };
@@ -45,7 +46,8 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "category " }),
 });
 const EditFood = ({ food }: Props) => {
-  const { getFood, setLoadingFood } = useFood();
+  const { getFood } = useFood();
+  const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
   const { categories } = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,7 +62,7 @@ const EditFood = ({ food }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setLoadingFood(true);
+      setLoading(true);
       let foodImage = food.food_image;
       if (image) {
         foodImage = await uploadImage(image);
@@ -73,17 +75,17 @@ const EditFood = ({ food }: Props) => {
         food_image: foodImage,
       };
       await putFood(foodData, foodData.categoty, food._id);
-      getFood();
+      await getFood();
     } catch (error) {
       console.log(error);
     } finally {
-      getFood();
+      setLoading(false);
     }
   };
   const handleDeleteFood = async () => {
-    setLoadingFood(true);
-    await deleteFood(food._id);
-    getFood();
+    setLoading(true);
+    await deleteFood(food._id, setLoading);
+    await getFood();
   };
   return (
     <Dialog>
@@ -135,15 +137,15 @@ const EditFood = ({ food }: Props) => {
               setImage={setImage}
             />
             <DialogClose
-              className="bg-black text-white px-4 py-2 rounded-md"
+              className="bg-black text-white px-4 py-2 rounded-md w-full mt-5"
               type="submit"
             >
               Submit
             </DialogClose>
           </form>
         </FormProvider>
-        <Button onClick={handleDeleteFood}>
-          <Trash />
+        <Button onClick={handleDeleteFood} className="w-[10%] bg-[#E11D481A] border border-[#EF4444]">
+          <Trash stroke="#EF4444"/>
         </Button>
         <DialogFooter className="flex justify-between"></DialogFooter>
       </DialogContent>

@@ -39,23 +39,15 @@ type DateType = {
 type OrderProviderType = {
   data: Data;
   getOrders: () => Promise<void>;
-  loadingOrder: boolean;
-  setLoadingOrder: (_loadingFood: boolean) => void;
-  date : DateType
-  setData : (_data : Data) => void
-  setDate : (_date : DateType) => void
-  statusLoading : boolean
-  setStatusLoading : (statusLoading:boolean) => void
+  date: DateType;
+  setData: (_data: Data) => void;
+  setDate: (_date: DateType) => void;
 };
 
 const OrderContext = createContext<OrderProviderType | null>(null);
 
-export const OrderProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-    const [page] = useQueryState("page", parseAsInteger.withDefault(1))
+export const OrderProvider = ({ children }: { children: ReactNode }) => {
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [data, setData] = useState<Data>({
     orders: [],
     totalPages: 0,
@@ -65,16 +57,11 @@ export const OrderProvider = ({
     from: addDays(new Date(), -20),
     to: new Date(),
   });
-  const [loadingOrder, setLoadingOrder] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(false) 
   const getOrders = async () => {
     const data: Data | undefined = await getOdrersReq(page, date);
     if (data) {
       setData(data);
-      setLoadingOrder(false);
-      setStatusLoading(false)
     }
-    
   };
 
   useEffect(() => {
@@ -82,9 +69,7 @@ export const OrderProvider = ({
   }, [date, page]);
 
   return (
-    <OrderContext.Provider
-      value={{ data, date, getOrders, loadingOrder, setLoadingOrder, setData, setDate , setStatusLoading, statusLoading}}
-    >
+    <OrderContext.Provider value={{ data, date, getOrders, setData, setDate }}>
       {children}
     </OrderContext.Provider>
   );

@@ -1,9 +1,7 @@
 import axios from "axios";
-
 // const URL = "https://food-service-cyan.vercel.app"  //vercel
-// const URL = "http://localhost:3000"; //local
-const URL = "https://food-backend-8ud7.onrender.com" //render
-console.log(process.env.NEXT_PUBLIC_BASE_URL);
+const URL = "http://localhost:3000"; //local
+// const URL = "https://food-backend-8ud7.onrender.com" //render);
 
 type Food = {
   categoty: string;
@@ -51,21 +49,18 @@ export const putFood = async (foodData: Food, category: string, id: string) => {
 export const addFood = async (
   foodData: food,
   category: string,
-  getFood: () => void
 ) => {
   try {
     const response = await axios.post(`${URL}/food/${category}`, foodData);
     console.log(response);
   } catch (error) {
     console.log(error);
-  } finally {
-    getFood();
   }
 };
 
 export const getFoods = async (
   category: string,
-  setLoadingFood: (loadingFood: boolean) => void
+
 ) => {
   try {
     const response = await axios.get(`${URL}/food/${category}`);
@@ -73,8 +68,6 @@ export const getFoods = async (
     return response.data;
   } catch (error) {
     console.log(error);
-  }finally{
-    setLoadingFood(false)
   }
 };
 
@@ -88,11 +81,13 @@ export const getAllFood = async () => {
   }
 };
 
-export const deleteFood = async (foodId: string) => {
+export const deleteFood = async (foodId: string, setLoading : (loading : boolean)=> void) => {
   try {
     const response = await axios.delete(`${URL}/food/${foodId}`);
     console.log(response);
   } catch (error) {
     console.log(error);
+  }finally{
+    setLoading(false)
   }
 };

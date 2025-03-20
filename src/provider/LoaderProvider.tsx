@@ -17,4 +17,10 @@ export const LoadingProvider = ({ children }:{children : ReactNode}) => {
   );
 };
 
-export const useLoading = () => useContext(LoadingContext);
+export const useLoading = () => {
+  const contex = useContext(LoadingContext)
+  if (!contex) {
+    throw new Error("useLoading must be used within a LoadingProvider")
+  }
+  return contex
+};

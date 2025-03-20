@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useLoading } from "@/provider/LoaderProvider";
 import { useOrder } from "@/provider/OrderProvider";
 import { chaneManyStatus } from "@/utils/orderRequest";
 import { useState } from "react";
@@ -18,12 +19,19 @@ type Props = {
   checkedOrders: string[];
 };
 const ChangeStatus = ({ checkedOrders }: Props) => {
-  const { getOrders, setLoadingOrder } = useOrder();
+  const { getOrders } = useOrder();
+  const {setLoading } = useLoading()
   const [status, setStatus] = useState("");
   const handleChangeStatus = async () => {
-    setLoadingOrder(true)
-    await chaneManyStatus(checkedOrders, status);
-    getOrders();
+    try{
+      setLoading(true)
+      await chaneManyStatus(checkedOrders, status);
+      await getOrders();
+    }catch(error){
+      console.log(error);
+    }finally{
+      setLoading(false)
+    }
   };
   return (
     <Dialog>
