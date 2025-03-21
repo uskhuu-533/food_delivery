@@ -9,16 +9,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 type Food = {
+  category: string;
   food_name: string;
   price: number;
   food_description: string;
   food_image: string | null;
-  category: Response;
-  _id: string;
-};
-
-type Response = {
-  title: string;
   _id: string;
 };
 

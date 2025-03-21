@@ -28,7 +28,7 @@ const CategoryFoods = ({ category }:Props) => {
       <p>{category.title}</p>
       <div className="flex flex-wrap gap-6">
         <AddNewFood category={category._id} />
-        {foods.map((food:Food , index) => (
+        {foods.map((food:Food , index:number) => (
           <div
             key={index}
             className="w-[271px] h-[257px] rounded-md border-[#EF4444] border flex flex-col p-4"
