@@ -1,12 +1,11 @@
 "use client";
 
 import { fetchCategories } from "@/utils/request";
+import { useQuery } from "@tanstack/react-query";
 import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
-  useState,
 } from "react";
 
 type Food = {
@@ -26,25 +25,19 @@ type Response = {
 
 type CategoryContextType = {
   categories: Response[];
-  fetchCategory: () => Promise<void>;
+  refetchCategory: () => void;
 };
 
 const CategoryContext = createContext<CategoryContextType | null>(null);
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-  const [categories, setCategory] = useState<Response[]>([]);
-
-  const fetchCategory = async () => {
-    const data = await fetchCategories();
-    setCategory(data);
-  };
-
-  useEffect(() => {
-    fetchCategory();
-  }, []);
-
+  const { data: categories = [], refetch : refetchCategory } = useQuery({
+    queryKey: ["foods"],
+    queryFn: () => fetchCategories(),
+    staleTime: 1000 * 60 * 5,
+  });
   return (
-    <CategoryContext.Provider value={{ categories, fetchCategory }}>
+    <CategoryContext.Provider value={{ categories, refetchCategory }}>
       {children}
     </CategoryContext.Provider>
   );

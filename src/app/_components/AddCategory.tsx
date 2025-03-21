@@ -14,23 +14,29 @@ import { useCategory } from "@/provider/CategoryProvider";
 import { useLoading } from "@/provider/LoaderProvider";
 import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Plus} from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 const AddCategory = () => {
-  const {fetchCategory} = useCategory()
-  const {setLoading} = useLoading()
+  const { refetchCategory } = useCategory();
+  const { setLoading } = useLoading();
   const [newCategory, setNewCategory] = useState({ title: "" });
-  const addNewCategory = async () => {
-    try {
-      setLoading(true)
-      await PostCategory(newCategory)
-      await fetchCategory();
-      setLoading(false)
-    } catch (err) {
-      console.error("Error posting user:", err);
-    }
-  };
+  const mutation = useMutation({
+    mutationFn: PostCategory,
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSuccess: async () => {
+      await refetchCategory();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+  });
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -62,7 +68,11 @@ const AddCategory = () => {
         <DialogDescription></DialogDescription>
 
         <DialogFooter>
-          <DialogClose type="submit" className="bg-black text-white px-4 py-2 rounded-md" onClick={addNewCategory}>
+          <DialogClose
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded-md"
+            onClick={() => mutation.mutate(newCategory)}
+          >
             add category
           </DialogClose>
         </DialogFooter>

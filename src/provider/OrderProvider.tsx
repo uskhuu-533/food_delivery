@@ -1,6 +1,7 @@
 "use client";
 
 import { getOdrersReq } from "@/utils/orderRequest";
+import { useQuery } from "@tanstack/react-query";
 import { addDays } from "date-fns";
 import { parseAsInteger, useQueryState } from "nuqs";
 import {
@@ -38,9 +39,8 @@ type DateType = {
 
 type OrderProviderType = {
   data: Data;
-  getOrders: () => Promise<void>;
+  getOrders:() => void;
   date: DateType;
-  setData: (_data: Data) => void;
   setDate: (_date: DateType) => void;
 };
 
@@ -48,28 +48,20 @@ const OrderContext = createContext<OrderProviderType | null>(null);
 
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-  const [data, setData] = useState<Data>({
-    orders: [],
-    totalPages: 0,
-    totalResults: 0,
-  });
   const [date, setDate] = useState<DateType>({
     from: addDays(new Date(), -20),
     to: new Date(),
   });
-  const getOrders = async () => {
-    const data: Data | undefined = await getOdrersReq(page, date);
-    if (data) {
-      setData(data);
-    }
-  };
-
-  useEffect(() => {
-    getOrders();
-  }, [date, page]);
+  const {
+    data = { orders: [], totalPages: 0, totalResults: 0 },
+    refetch : getOrders,
+  } = useQuery({
+    queryKey: ["orders", page, date],
+    queryFn: () => getOdrersReq(page, date),
+  });
 
   return (
-    <OrderContext.Provider value={{ data, date, getOrders, setData, setDate }}>
+    <OrderContext.Provider value={{ data, date, getOrders, setDate }}>
       {children}
     </OrderContext.Provider>
   );

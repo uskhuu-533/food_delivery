@@ -1,9 +1,10 @@
 "use client";
 
+
 import AddNewFood from "../_components/AddFood";
 import EditFood from "../_components/EditFood";
 import { useFood } from "@/provider/FoodProvider";
-type props = {
+type Props = {
   category: Response;
 
 };
@@ -12,22 +13,21 @@ type Response = {
   _id: string;
 };
 type Food = {
+  category: string;
   food_name: string;
   price: number;
   food_description: string;
   food_image: string | null;
-  category: Response;
   _id: string;
 };
-
-const CategoryFoods = ({ category }: props) => {
+const CategoryFoods = ({ category }:Props) => {
   const {foods} = useFood()
 
   return (
     <div className="w-full h-fit rounded-md p-6 bg-white flex flex-col gap-3">
       <p>{category.title}</p>
       <div className="flex flex-wrap gap-6">
-        <AddNewFood category={category} />
+        <AddNewFood category={category._id} />
         {foods.map((food:Food , index) => (
           <div
             key={index}

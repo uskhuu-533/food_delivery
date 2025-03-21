@@ -11,17 +11,10 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
 import FormHook from "./FormHook";
 
-type Props = {
-  category: Response;
-
-};
-type Response = {
-  title: string;
-  _id: string;
-};
 
 
-const AddNewFood = ({ category }: Props) => {
+
+const AddNewFood = ({ category }: {category : string}) => {
   return (
     <div className="w-[271px] h-[257px] rounded-md border-[#EF4444] border-2 border-dashed flex gap-6 items-center justify-center">
       <Dialog>
@@ -39,7 +32,7 @@ const AddNewFood = ({ category }: Props) => {
               Add new Dish to Appetizers
             </DialogTitle>
           </DialogHeader>
-          <FormHook category={category._id}  />
+          <FormHook category={category}  />
 
           <DialogDescription></DialogDescription>
         </DialogContent>

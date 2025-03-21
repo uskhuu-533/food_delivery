@@ -18,7 +18,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
-import { deleteFood, putFood } from "@/utils/request";
+import { deleteFoodRequest, putFood } from "@/utils/request";
 import { useCategory } from "@/provider/CategoryProvider";
 import { useFood } from "@/provider/FoodProvider";
 import { useLoading } from "@/provider/LoaderProvider";
@@ -30,8 +30,8 @@ type Food = {
   price: number;
   food_description: string;
   food_image: string | null;
-  category: { _id: string; title: string };
   _id: string;
+  category : string
 };
 
 const formSchema = z.object({
@@ -46,7 +46,7 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "category " }),
 });
 const EditFood = ({ food }: Props) => {
-  const { getFood } = useFood();
+  const { foodRefetch } = useFood();
   const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
   const { categories } = useCategory();
@@ -56,7 +56,7 @@ const EditFood = ({ food }: Props) => {
       food_name: food.food_name,
       price: food.price,
       food_description: food.food_description,
-      category: food.category._id,
+      category: food.category
     },
   });
 
@@ -75,7 +75,7 @@ const EditFood = ({ food }: Props) => {
         food_image: foodImage,
       };
       await putFood(foodData, foodData.categoty, food._id);
-      await getFood();
+      await foodRefetch();
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,8 +84,9 @@ const EditFood = ({ food }: Props) => {
   };
   const handleDeleteFood = async () => {
     setLoading(true);
-    await deleteFood(food._id, setLoading);
-    await getFood();
+    await deleteFoodRequest(food._id);
+     await foodRefetch();
+     setLoading(false)
   };
   return (
     <Dialog>
@@ -144,9 +145,9 @@ const EditFood = ({ food }: Props) => {
             </DialogClose>
           </form>
         </FormProvider>
-        <Button onClick={handleDeleteFood} className="w-[10%] bg-[#E11D481A] border border-[#EF4444]">
+        <DialogClose onClick={handleDeleteFood} className="w-[10%] bg-[#E11D481A] border border-[#EF4444] rounded-md py-2 flex justify-center">
           <Trash stroke="#EF4444"/>
-        </Button>
+        </DialogClose>
         <DialogFooter className="flex justify-between"></DialogFooter>
       </DialogContent>
     </Dialog>

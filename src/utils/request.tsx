@@ -4,17 +4,19 @@ import axios from "axios";
 const URL = "https://food-backend-8ud7.onrender.com" //render);
 
 type Food = {
+  category: string;
+  food_name: string;
+  price: number;
+  food_description: string;
+  food_image: string | null;
+  _id :string
+};
+type food = {
   categoty: string;
   food_name: string;
   price: number;
   food_description: string;
   food_image: string | null;
-};
-type food = {
-  food_name: string;
-  price: number;
-  food_description: string;
-  food_image: string;
 };
 export const fetchCategories = async () => {
   try {
@@ -37,7 +39,7 @@ export const PostCategory = async (newCategory: { title: string }) => {
   }
 };
 
-export const putFood = async (foodData: Food, category: string, id: string) => {
+export const putFood = async (foodData: food, category: string, id: string) => {
   try {
     const res = await axios.put(`${URL}/food/${id}/${category}`, foodData);
     console.log(res);
@@ -46,8 +48,8 @@ export const putFood = async (foodData: Food, category: string, id: string) => {
   }
 };
 
-export const addFood = async (
-  foodData: food,
+export const addFoodRequest = async (
+  foodData: Food,
   category: string,
 ) => {
   try {
@@ -81,13 +83,11 @@ export const getAllFood = async () => {
   }
 };
 
-export const deleteFood = async (foodId: string, setLoading : (loading : boolean)=> void) => {
+export const deleteFoodRequest = async (foodId: string) => {
   try {
     const response = await axios.delete(`${URL}/food/${foodId}`);
     console.log(response);
   } catch (error) {
     console.log(error);
-  }finally{
-    setLoading(false)
   }
 };

@@ -43,7 +43,7 @@ type DateType = {
   to: Date;
 };
 const OrderCont = () => {
-  const { data, setData } = useOrder();
+  const { data } = useOrder();
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
   const handleCheckBox = (id: string) => {
     if (checkedBox.includes(id)) {
@@ -59,13 +59,13 @@ const OrderCont = () => {
       setCheckedBox(data.orders.map((item) => item._id));
     }
   };
-  const sortOrderByStatus = () => {
-    const sortedOrder = data.orders.sort((a, b) =>
-      b.status.localeCompare(a.status)
-    );
-    console.log(sortedOrder);
-    setData({ ...data, orders: sortedOrder });
-  };
+  // const sortOrderByStatus = () => {
+  //   const sortedOrder = data.orders.sort((a, b) =>
+  //     b.status.localeCompare(a.status)
+  //   );
+  //   console.log(sortedOrder);
+  //   setData({ ...data, orders: sortedOrder });
+  // };
   return (
     <div className="px-8 w-full py-10">
   
@@ -93,7 +93,7 @@ const OrderCont = () => {
             <TableHead>Delivery address</TableHead>
             <TableHead className="justify-between flex items-center">
               Delivery status
-              <ChevronsUpDown onClick={sortOrderByStatus} size={16} />
+              <ChevronsUpDown  size={16} />
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -108,14 +108,14 @@ const OrderCont = () => {
                 />
               </TableCell>
               <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>{order.userData.email}</TableCell>
+              <TableCell>{order.userData?.email}</TableCell>
               <TableCell className="flex justify-between">
                 <div>{order.orderItems.length}food</div>
                 <OrderFoodDetai item={order.orderItems} />
               </TableCell>
               <TableCell>{order.createdAt}</TableCell>
               <TableCell>{order.totalPrice}</TableCell>
-              <TableCell>{order.userData.address} </TableCell>
+              <TableCell>{order.userData?.address} </TableCell>
               <TableCell>
                 <ChangeOneStatus
                   orderId={order._id}

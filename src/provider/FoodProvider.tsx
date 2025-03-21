@@ -5,9 +5,8 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
-  useState,
 } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type Food = {
   food_name: string;
@@ -25,11 +24,10 @@ type Response = {
 
 type FoodProviderType = {
   foods: Food[];
-  getFood: () => Promise<void>;
+  foodRefetch: () => void;
 };
 
 const FoodContext = createContext<FoodProviderType | null>(null);
-
 export const FoodProvider = ({
   children,
   categoryId,
@@ -37,19 +35,13 @@ export const FoodProvider = ({
   children: ReactNode;
   categoryId: string;
 }) => {
-  const [foods, setFoods] = useState<Food[]>([]);
-
-  const getFood = async () => {
-    const data = await getFoods(categoryId);
-    setFoods(data);
-  };
-
-  useEffect(() => {
-    getFood();
-  }, []);
-
+  const { data: foods = [], refetch : foodRefetch} = useQuery({
+    queryKey: ["foods", categoryId],
+    queryFn: () => getFoods(categoryId),
+    enabled : !!categoryId
+  });
   return (
-    <FoodContext.Provider value={{ foods, getFood }}>
+    <FoodContext.Provider value={{ foods, foodRefetch }}>
       {children}
     </FoodContext.Provider>
   );

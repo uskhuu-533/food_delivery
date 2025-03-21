@@ -7,10 +7,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
-import { addFood } from "@/utils/request";
 import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
 import { useLoading } from "@/provider/LoaderProvider";
+import { addFoodRequest } from "@/utils/request";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -23,12 +23,9 @@ const formSchema = z.object({
     .min(1, { message: "Field ingredients are required." }),
   category: z.string(),
 });
-type Props = {
-  category: string;
 
-};
-const FormHook = ({ category}: Props) => {
-  const {getFood} = useFood()
+const FormHook = ({ category}: {category :string}) => {
+  const {foodRefetch} = useFood()
   const {setLoading} = useLoading()
   const [image, setImage] = useState<File | undefined>(undefined);
 
@@ -50,10 +47,12 @@ const FormHook = ({ category}: Props) => {
           food_name: values.food_name,
           price: values.price,
           food_description: values.food_description,
-          food_image: imageUploadRes,
+          food_image: imageUploadRes || null,
+          category : "",
+          _id : ""
         };
-        await addFood(foodData, category)
-        await getFood()
+        await addFoodRequest(foodData, category)
+        await foodRefetch()
       } catch (error) {
         console.log(error);
       } finally{
