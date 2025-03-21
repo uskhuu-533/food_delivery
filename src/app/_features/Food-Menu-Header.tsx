@@ -8,7 +8,7 @@ import { useCategory } from "@/provider/CategoryProvider";
 
 const FoodMenuHeader = () => {
   const [foods, setFoods] = useState([]);
-const { categories, setLoading} = useCategory()
+const { categories} = useCategory()
   const getAllFoods = async () => {
     const allFood = await getAllFood()
     setFoods(allFood)
