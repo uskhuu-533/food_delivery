@@ -27,7 +27,7 @@ const { categories} = useCategory()
           <button className="flex px-4 py-2 rounded-full text-black items-center border gap-2">
             <p>All dishes</p>
             <div className="py-[2px] text-white text-sm px-[10px] rounded-full bg-black">
-              {foods.length}
+              {foods?.length}
             </div>
           </button>
           {categories?.map((category, index) => (

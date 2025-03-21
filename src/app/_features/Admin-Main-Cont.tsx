@@ -28,7 +28,7 @@ const AdminCont = () => {
       <div className="flex w-full flex-col gap-6 items-center mt-8 relative px-8">
         <FoodMenuHeader />
         <div className="flex flex-col w-full gap-6 pb-10">
-          {categories.map((category: Response, index) => (
+          {categories?.map((category: Response, index) => (
             <FoodProvider key={index} categoryId={category._id}>
               <CategoryFoods category={category} />
             </FoodProvider>
