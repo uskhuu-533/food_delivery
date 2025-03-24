@@ -22,7 +22,7 @@ export default function Home() {
       }
     };
     getEmail();
-  }, []);
+  }, [router]);
 
   return (
     <div className="w-screen flex h-screen items-center">

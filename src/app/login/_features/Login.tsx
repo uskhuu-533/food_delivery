@@ -16,10 +16,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-type form = {
-  email: string;
-  password: string;
-};
+
 const formSchema = z.object({
   email: z
     .string()

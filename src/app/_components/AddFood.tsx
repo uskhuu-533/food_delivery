@@ -10,10 +10,6 @@ import {
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
 import FormHook from "./FormHook";
-
-
-
-
 const AddNewFood = ({ category }: {category : string}) => {
   return (
     <div className="w-[271px] h-[257px] rounded-md border-[#EF4444] border-2 border-dashed flex gap-6 items-center justify-center">
