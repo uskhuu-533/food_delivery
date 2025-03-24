@@ -18,30 +18,7 @@ import { PaginationComponent } from "@/components/Pagination";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
 import { ChevronsUpDown } from "lucide-react";
 import { useOrder } from "@/provider/OrderProvider";
-type Order = {
-  _id: string;
-  userData: {
-    email: string;
-    address: string;
-  };
-  orderItems: item[];
-  createdAt: string;
-  totalPrice: number;
-  status: string;
-};
-type item = {
-  food: { food_name: string; food_image: string };
-  quantity: number;
-};
-type Data = {
-  orders: Order[];
-  totalPages: number;
-  totalResults: number;
-};
-type DateType = {
-  from: Date;
-  to: Date;
-};
+
 const OrderCont = () => {
   const { data } = useOrder();
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
@@ -59,13 +36,6 @@ const OrderCont = () => {
       setCheckedBox(data.orders.map((item) => item._id));
     }
   };
-  // const sortOrderByStatus = () => {
-  //   const sortedOrder = data.orders.sort((a, b) =>
-  //     b.status.localeCompare(a.status)
-  //   );
-  //   console.log(sortedOrder);
-  //   setData({ ...data, orders: sortedOrder });
-  // };
   return (
     <div className="px-8 w-full py-10">
   

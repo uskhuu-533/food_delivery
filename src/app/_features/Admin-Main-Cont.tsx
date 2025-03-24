@@ -4,7 +4,7 @@ import CategoryFoods from "./Category-Foods";
 import FoodMenuHeader from "@/app/_features/Food-Menu-Header";
 import ScreenLoader from "@/components/ScreenLoader";
 import { useCategory } from "@/provider/CategoryProvider";
-import { FoodProvider, useFood } from "@/provider/FoodProvider";
+import { FoodProvider } from "@/provider/FoodProvider";
 
 type Response = {
   title: string;

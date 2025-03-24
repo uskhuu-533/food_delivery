@@ -1,7 +1,7 @@
 import AdminCont from "@/app/_features/Admin-Main-Cont";
 import SideBar from "@/components/Side-Bar";
 import { CategoryProvider } from "@/provider/CategoryProvider";
-import { LoadingProvider } from "@/provider/LoaderProvider";
+
 
 const Home = () => {
   return (

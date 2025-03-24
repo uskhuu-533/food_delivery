@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+
 import {
   FormControl,
   FormField,
@@ -8,14 +8,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@radix-ui/react-select";
-// import { ChevronsUpDown } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 type Props = {
   form: UseFormReturn<
@@ -25,7 +17,6 @@ type Props = {
       food_description: string;
       category: string;
     },
-    any,
     undefined
   >;
   name: "food_name" | "price" | "food_description" | "category";

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { uploadImage } from "@/utils/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit2, Trash, X } from "lucide-react";
+import { Edit2, Trash} from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";

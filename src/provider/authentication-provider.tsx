@@ -18,7 +18,7 @@ export const AuthenticationProvider = ({
       router.push("/login");
     }
     setLoading(false);
-  }, []);
+  }, [router]);
 
   if (loading) {
     return <div>...loading</div>;

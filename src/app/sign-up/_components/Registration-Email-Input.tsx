@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
+
 import { UseFormReturn } from "react-hook-form";
 type props = {
   setStep: (_step: number) => void;
@@ -12,24 +12,19 @@ type props = {
     email: string;
     password: string;
     confirm: string;
-}, any, undefined>
+}, undefined>
 };
-type User = {
-  email: string;
-  password: string;
-};
+
 
 
 export const RegistrationEmailInput = ({ setStep, form}: props) => {
-  const [isEmailInvaild, setInvaild] = useState(false);
+
 
   const jumpToPassword = () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (regex.test(form.watch('email'))) {
       setStep(2);
-    } else {
-      setInvaild(true);
-    }
+    } 
   };
 
 

@@ -8,10 +8,6 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-type User = {
-  email: string;
-  password: string;
-};
 const formSchema = z
   .object({
     email: z
@@ -63,7 +59,7 @@ const RegistrationForm = () => {
       }
     };
     getEmail();
-  }, []);
+  }, [router]);
 
   return (
     <div className="w-[40%] flex items-center justify-center">

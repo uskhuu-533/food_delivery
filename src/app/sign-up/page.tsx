@@ -10,7 +10,6 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     const getEmail = async () => {
-      const token = localStorage.getItem("user");
       try {
         const response = await getUserEmail()
         if (response?.status === 200) {
@@ -21,7 +20,7 @@ export default function Home() {
       }
     };
     getEmail();
-  }, []);
+  }, [router]);
 
   return (
     <div className="w-screen flex h-screen items-center">

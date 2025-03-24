@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentIcon, LayoutDashboardIcon, Settings, Truck } from "lucide-react";
+import {  LayoutDashboardIcon, Settings, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
