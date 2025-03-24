@@ -39,7 +39,7 @@ const ChangeStatus = ({ checkedOrders }: Props) => {
         <Button
           className={`${
             checkedOrders.length === 0
-              ? "bg-gray-400 hover:bg-gray-400"
+              ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
               : "bg-black"
           } border py-2 px-4 rounded-full`}
         >
