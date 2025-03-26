@@ -1,7 +1,7 @@
 import axios from "axios";
 // const baseUrl = "https://food-service-cyan.vercel.app";
-// const baseUrl = "http://localhost:3000"
-const baseUrl = "https://food-backend-8ud7.onrender.com"
+const baseUrl = "http://localhost:3000"
+// const baseUrl = "https://food-backend-8ud7.onrender.com"
 export const login = async (form: { email: string; password: string }) => {
   try {
     const response = await axios.post(`${baseUrl}/users/login`, form, {
@@ -10,7 +10,6 @@ export const login = async (form: { email: string; password: string }) => {
       },
     });
     console.log(response);
-    
     return response
   } catch (error) {
     console.log(error);
@@ -39,7 +38,7 @@ export const getUserEmail = async () => {
     });
     console.log(response);
     
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }

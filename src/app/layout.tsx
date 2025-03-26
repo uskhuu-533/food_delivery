@@ -9,6 +9,8 @@ import { Suspense, useState } from "react";
 import { AuthenticationProvider } from "@/provider/authentication-provider";
 import { LoadingProvider } from "@/provider/LoaderProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UserProvider } from "@/provider/User-Provider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +45,10 @@ export default function RootLayout({
             <NuqsAdapter>
               <QueryClientProvider client={queryClient}>
               <AuthenticationProvider>
+                <UserProvider>
                 <LoadingProvider>{children}</LoadingProvider>
+                <Toaster />
+                </UserProvider>
               </AuthenticationProvider>
               </QueryClientProvider>
             </NuqsAdapter>

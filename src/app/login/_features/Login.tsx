@@ -15,6 +15,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -39,9 +40,26 @@ const Login = () => {
     },
   });
   const checkPassword = async (values: z.infer<typeof formSchema>) => {
-    const data = await login(values);
-    if (data?.status === 200) {
-      localStorage.setItem("token", data.data);
+    const response = await login(values);
+   console.log(response);
+   
+   if(response?.data ===  "Wrong password or email"){
+      console.log("wrong password");
+      form.setError("password", {message: response.data})
+    } else if (response?.data.role !== "ADMIN"){
+      console.log("role error");
+      
+      toast(
+        <div>
+          <a href="https://food-delivery-user-lemon.vercel.app/">client</a>{" "}
+        </div>,
+        {
+          description: "",
+          position: 'top-center',
+        }
+      );
+    }else  if (response?.status === 200 && response.data.role === "ADMIN") {
+      localStorage.setItem("token", response.data.token);
       router.push("/");
     }
   };
