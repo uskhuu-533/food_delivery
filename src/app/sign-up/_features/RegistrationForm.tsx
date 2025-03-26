@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 import { useRouter } from "next/navigation";
 import { RegistrationEmailInput } from "../_components/Registration-Email-Input";
 import { RegistrationPasswordInput } from "../_components/Registration-Password-Input";
-import { getUserEmail, signUp } from "@/utils/authRequest";
+import {  signUp } from "@/utils/authRequest";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,21 +46,7 @@ const RegistrationForm = () => {
       router.push("/login");
     }
   };
-  useEffect(() => {
-    const getEmail = async () => {
-  
-      try {
-        const response = await getUserEmail()
-        if (response?.status === 200) {
-          router.push("/");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getEmail();
-  }, [router]);
-
+ 
   return (
     <div className="w-[40%] flex items-center justify-center">
       <div className="w-[80%] flex flex-col h-fit gap-6">
