@@ -41,24 +41,28 @@ const Login = () => {
   });
   const checkPassword = async (values: z.infer<typeof formSchema>) => {
     const response = await login(values);
-   console.log(response);
-   
-   if(response?.data ===  "Wrong password or email"){
+    console.log(response);
+
+    if (response?.data === "Wrong password or email") {
       console.log("wrong password");
-      form.setError("password", {message: response.data})
-    } else if (response?.data.role !== "ADMIN"){
+      form.setError("password", { message: response.data });
+    } else if (response?.data.role !== "ADMIN") {
       console.log("role error");
-      
+
       toast(
-        <div>
-          <a href="https://food-delivery-user-lemon.vercel.app/">client</a>{" "}
+        <div className="flex gap-2 w-full h-full items-center">
+          <p> Access denied. You do not have the necessary permissions to access this page.  
+          Please use the client portal instead.</p>
+          <a href="https://food-delivery-user-lemon.vercel.app/">
+          <Button className="rounded-full">Client page</Button>
+          </a>{" "}
         </div>,
         {
           description: "",
-          position: 'top-center',
+          position: "top-center",
         }
       );
-    }else  if (response?.status === 200 && response.data.role === "ADMIN") {
+    } else if (response?.status === 200 && response.data.role === "ADMIN") {
       localStorage.setItem("token", response.data.token);
       router.push("/");
     }
