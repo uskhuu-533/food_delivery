@@ -17,7 +17,7 @@ type User = {
   role: string;
 };
 type UserContextType = {
-  user: User;
+  user: User | null;
   openAddressDialog: boolean;
   setOpenAddressDialog: (openAddressDialog: boolean) => void;
   refetchUser: () => void;
@@ -28,7 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const {
-    data: user,
+    data: user = null,
     refetch: refetchUser,
     isLoading,
   } = useQuery({
