@@ -11,6 +11,7 @@ import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
 import { useLoading } from "@/provider/LoaderProvider";
 import { addFoodRequest } from "@/utils/request";
+import { useCategory } from "@/provider/CategoryProvider";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -24,11 +25,11 @@ const formSchema = z.object({
   category: z.string(),
 });
 
-const FormHook = ({ category}: {category :string}) => {
-  const {foodRefetch} = useFood()
-  const {setLoading} = useLoading()
+const FormHook = ({ category }: { category: string }) => {
+  const { foodRefetch } = useFood();
+  const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
-
+  const { refetchCategory } = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,21 +43,22 @@ const FormHook = ({ category}: {category :string}) => {
     if (image) {
       try {
         setLoading(true);
-        const imageUploadRes:string = await uploadImage(image);
+        const imageUploadRes: string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
           price: values.price,
           food_description: values.food_description,
           food_image: imageUploadRes || null,
-          category : "",
-          _id : ""
+          category: "",
+          _id: "",
         };
-        await addFoodRequest(foodData, category)
-        await foodRefetch()
+        await addFoodRequest(foodData, category);
+        await foodRefetch();
+        await refetchCategory();
       } catch (error) {
         console.log(error);
-      } finally{
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -85,7 +87,12 @@ const FormHook = ({ category}: {category :string}) => {
           label="Ingredients"
         />
         <ImageInput setImage={setImage} image={image} defaultPreview={null} />
-        <DialogClose  className="bg-black text-white px-4 py-2 rounded-md"  type="submit">Submit</DialogClose>
+        <DialogClose
+          className="bg-black text-white px-4 py-2 rounded-md"
+          type="submit"
+        >
+          Submit
+        </DialogClose>
       </form>
     </FormProvider>
   );
