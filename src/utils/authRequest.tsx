@@ -29,6 +29,7 @@ export const signUp = async (user:{ email: string; password: string }) => {
         return response
     } catch (error) {
         console.log(error);
+        return null
         
     }
 }
@@ -43,8 +44,9 @@ export const getUserEmail = async () => {
     });
     console.log(response);
     
-    return response.data;
+    return response.data || null
   } catch (error) {
     console.log(error);
+    return null
   }
 };

@@ -16,8 +16,8 @@ import OrderFoodDetai from "../_components/OrderFoodDetail";
 import OrderHeader from "./Order-Header";
 import { PaginationComponent } from "@/components/Pagination";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
-import { ChevronsUpDown } from "lucide-react";
 import { useOrder } from "@/provider/OrderProvider";
+import { format } from "date-fns";
 
 const OrderCont = () => {
   const { data } = useOrder();
@@ -33,13 +33,12 @@ const OrderCont = () => {
     if (checkedBox.length === data?.orders.length) {
       setCheckedBox([]);
     } else {
-      if (!data) return null 
+      if (!data) return null;
       setCheckedBox(data.orders.map((item) => item._id));
     }
   };
   return (
     <div className="px-8 w-full py-10">
-  
       <Avatar />
       <OrderHeader checkedBox={checkedBox} />
       <Table>
@@ -56,16 +55,10 @@ const OrderCont = () => {
             <TableHead className="w-[100px]">№</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Food</TableHead>
-            <TableHead className="justify-between flex items-center">
-              <p>Date</p>
-              <ChevronsUpDown size={16} />
-            </TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Delivery address</TableHead>
-            <TableHead className="justify-between flex items-center">
-              Delivery status
-              <ChevronsUpDown  size={16} />
-            </TableHead>
+            <TableHead>Delivery status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -84,7 +77,9 @@ const OrderCont = () => {
                 <div>{order.orderItems.length}food</div>
                 <OrderFoodDetai item={order.orderItems} />
               </TableCell>
-              <TableCell>{order.createdAt}</TableCell>
+              <TableCell>
+                {format(order.createdAt, "yyyy-MM-dd  --- hh:mm:ss, E")}
+              </TableCell>
               <TableCell>{order.totalPrice}</TableCell>
               <TableCell>{order.userData?.address} </TableCell>
               <TableCell>

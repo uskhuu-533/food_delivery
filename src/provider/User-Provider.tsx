@@ -1,12 +1,14 @@
 "use client";
 
+import LoaderAuth from "@/components/LoaderAuth";
 import { getUserEmail } from "@/utils/authRequest";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -25,22 +27,32 @@ const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
+  const path = usePathname()
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const {
     data: user = null,
     refetch: refetchUser,
     isLoading,
-    isError
   } = useQuery({
     queryKey: ["userEmail"],
     queryFn: () => getUserEmail(),
   });
- if (isError) {
-  router.push('login')
- }
+  useEffect(()=>{
+    if (!user) {
+      console.log(path);
+      
+      if (path === "/sign-up") return
+      router.push('/login')
+     }else{
+      if (path === "/order" || path === "/settings") return
+      router.push('/')
+     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[isLoading])
+
 
   if (isLoading) {
-    return <div>Loadoing...</div>;
+    return <LoaderAuth />;
   }
   return (
     <UserContext.Provider
