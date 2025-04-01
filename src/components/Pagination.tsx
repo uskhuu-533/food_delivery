@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/pagination";
 import { useQueryState, parseAsInteger } from "nuqs";
 type Props = {
-  totalPages: number;
+  totalPages: number | undefined;
 };
 export function PaginationComponent({ totalPages }: Props) {
     const [page, setPage] = useQueryState("page", parseAsInteger)
   const pages = Array.from(Array(totalPages).keys());
- if (!page) return
+ if (!page || !totalPages) return null
   return (
     <Pagination>
       <PaginationContent>

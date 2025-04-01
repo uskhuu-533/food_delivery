@@ -14,7 +14,7 @@ const OrderHeader = ({ checkedBox}: Props) => {
     <div className="w-full p-4 flex justify-between">
       <div className="flex flex-col">
         <div>Order</div>
-        <div>{data.totalResults} items</div>
+        <div>{data?.totalResults} items</div>
       </div>
       <div className="flex gap-3">
         <DatePicker />

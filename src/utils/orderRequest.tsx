@@ -1,11 +1,12 @@
 import axios from "axios"
 
 // const baseUrl = "https://food-service-cyan.vercel.app"
-// const baseUrl = "http://localhost:3000"
-const baseUrl = "https://food-backend-8ud7.onrender.com"
+const baseUrl = "http://localhost:3000"
+// const baseUrl = "https://food-backend-8ud7.onrender.com"
 
-export const getOdrersReq = async (page:number, date:{from:Date, to:Date}) => {
+export const getOdrersReq = async (page:number, date:{from:Date | null, to:Date | null}) => {
     try {
+        if (!date.from || !date.to) return null
         const response = await axios.get(`${baseUrl}/foodorder/admin/${page}`,{
             params: {
                 startDate: date.from.toISOString(),

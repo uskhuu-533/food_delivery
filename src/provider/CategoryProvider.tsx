@@ -26,18 +26,21 @@ type Response = {
 type CategoryContextType = {
   categories: Response[];
   refetchCategory: () => void;
+  foodLenght : number
 };
 
 const CategoryContext = createContext<CategoryContextType | null>(null);
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-  const { data: categories = [], refetch : refetchCategory } = useQuery({
+  const { data: data = [], refetch : refetchCategory } = useQuery({
     queryKey: ["foods"],
     queryFn: () => fetchCategories(),
     staleTime: 1000 * 60 * 5,
   });
+  const categories = data.categories
+  const foodLenght = data.foods
   return (
-    <CategoryContext.Provider value={{ categories, refetchCategory }}>
+    <CategoryContext.Provider value={{ categories, refetchCategory, foodLenght }}>
       {children}
     </CategoryContext.Provider>
   );

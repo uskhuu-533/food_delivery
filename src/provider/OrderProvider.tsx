@@ -32,12 +32,12 @@ type Data = {
   totalResults: number;
 };
 type DateType = {
-  from: Date;
-  to: Date;
+  from: Date | null;
+  to: Date |null;
 };
 
 type OrderProviderType = {
-  data: Data;
+  data: Data | null;
   getOrders:() => void;
   date: DateType;
   setDate: (_date: DateType) => void;
@@ -48,9 +48,10 @@ const OrderContext = createContext<OrderProviderType | null>(null);
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [date, setDate] = useState<DateType>({
-    from: addDays(new Date(), -20),
+    from: addDays(new Date(), -20) ,
     to: new Date(),
   });
+
   const {
     data = { orders: [], totalPages: 0, totalResults: 0 },
     refetch : getOrders,

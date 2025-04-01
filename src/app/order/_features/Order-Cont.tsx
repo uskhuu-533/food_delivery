@@ -33,6 +33,7 @@ const OrderCont = () => {
     if (checkedBox.length === data?.orders.length) {
       setCheckedBox([]);
     } else {
+      if (!data) return null 
       setCheckedBox(data.orders.map((item) => item._id));
     }
   };
@@ -49,7 +50,7 @@ const OrderCont = () => {
               <input
                 type="checkbox"
                 onChange={handleChangeAllStatus}
-                checked={checkedBox.length === data.orders.length}
+                checked={checkedBox.length === data?.orders.length}
               />
             </TableHead>
             <TableHead className="w-[100px]">№</TableHead>
@@ -68,7 +69,7 @@ const OrderCont = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.orders.map((order, index) => (
+          {data?.orders.map((order, index) => (
             <TableRow key={order._id}>
               <TableCell>
                 <input
@@ -99,7 +100,7 @@ const OrderCont = () => {
           <TableRow></TableRow>
         </TableFooter>
       </Table>
-      <PaginationComponent totalPages={data.totalPages} />
+      <PaginationComponent totalPages={data?.totalPages} />
     </div>
   );
 };

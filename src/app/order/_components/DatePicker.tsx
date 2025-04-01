@@ -14,12 +14,22 @@ import { useOrder } from "@/provider/OrderProvider";
 export function DatePicker() {
   const {setDate, getOrders, date} = useOrder()
   
+  // Add default values to ensure date.from and date.to are always valid Date objects
+  const safeDate = {
+    from: date?.from instanceof Date && !isNaN(date.from.getTime()) 
+          ? date.from 
+          : addDays(new Date(), -10),
+    to: date?.to instanceof Date && !isNaN(date.to.getTime()) 
+        ? date.to 
+        : addDays(new Date(), 0)
+  };
+  
   const handleFromDateChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const newFromDate = new Date(e.target.value);
     setDate({
       ...date,
       from: newFromDate,
-      to: newFromDate > date.to ? addDays(newFromDate, 1) : date.to
+      to: newFromDate > safeDate.to ? addDays(newFromDate, 1) : safeDate.to
     });
   };
 
@@ -33,8 +43,8 @@ export function DatePicker() {
 
   const handleSubmit = () => {
     console.log("Selected date range:", {
-      from: format(date.from, "yyyy-MM-dd"),
-      to: format(date.to, "yyyy-MM-dd")
+      from: format(safeDate.from, "yyyy-MM-dd"),
+      to: format(safeDate.to, "yyyy-MM-dd")
     });
     getOrders()
   };
@@ -49,14 +59,14 @@ export function DatePicker() {
             className={`w-full max-w-sm justify-start text-left font-normal rounded-full`}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
+            {safeDate.from ? (
+              safeDate.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(safeDate.from, "LLL dd, y")} -{" "}
+                  {format(safeDate.to, "LLL dd, y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(safeDate.from, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
@@ -73,7 +83,7 @@ export function DatePicker() {
                 id="from-date"
                 type="date" 
                 className="rounded-md border border-gray-300 p-2" 
-                value={format(date.from, "yyyy-MM-dd")}
+                value={format(safeDate.from, "yyyy-MM-dd")}
                 onChange={handleFromDateChange}
               />
             </div>
@@ -86,9 +96,9 @@ export function DatePicker() {
                 id="to-date"
                 type="date" 
                 className="rounded-md border border-gray-300 p-2" 
-                value={format(date.to, "yyyy-MM-dd")}
+                value={format(safeDate.to, "yyyy-MM-dd")}
                 onChange={handleToDateChange}
-                min={format(date.from, "yyyy-MM-dd")}
+                min={format(safeDate.from, "yyyy-MM-dd")}
               />
             </div>
             

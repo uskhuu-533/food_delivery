@@ -128,9 +128,9 @@ const Login = () => {
 
         <div className="flex w-full justify-center gap-4">
           <p>Don’t have an account?</p>
-          <p onClick={() => router.push("/sign-up")} className="text-[#2563EB]">
+          <button onClick={() => router.push("/sign-up")} className="text-[#2563EB] cursor-text">
             Sign up
-          </p>
+          </button>
         </div>
       </div>
     </div>

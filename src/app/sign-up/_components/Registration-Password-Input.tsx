@@ -52,7 +52,7 @@ export const RegistrationPasswordInput = ({ setStep, form }: props) => {
               <FormControl>
                 <Input
                   type={show ? "text" : "password"}
-                  placeholder="Enter your email address"
+                  placeholder="Enter your password"
                   {...field}
                 />
               </FormControl>
@@ -69,7 +69,7 @@ export const RegistrationPasswordInput = ({ setStep, form }: props) => {
               <FormControl>
                 <Input
                   type={show ? "text" : "password"}
-                  placeholder="Enter your email address"
+                  placeholder="Enter your password confirm"
                   {...field}
                 />
               </FormControl>

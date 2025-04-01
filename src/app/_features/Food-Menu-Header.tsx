@@ -1,22 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import AddCategory from "../_components/AddCategory";
 import Avatar from "../../components/Avatar";
-import { getAllFood } from "@/utils/request";
 import { useCategory } from "@/provider/CategoryProvider";
 
 
 const FoodMenuHeader = () => {
-  const [foods, setFoods] = useState([]);
-const { categories } = useCategory()
-  const getAllFoods = async () => {
-    const allFood = await getAllFood()
-    setFoods(allFood)
-  };
-  useEffect(() => {
-    getAllFoods();
-  }, []);
-
+const { categories , foodLenght} = useCategory()
   return (
     <div className=" w-full h-fit top-6 flex flex-col gap-6">
       <Avatar />
@@ -26,7 +16,7 @@ const { categories } = useCategory()
           <button className="flex px-4 py-2 rounded-full text-black items-center border gap-2">
             <p>All dishes</p>
             <div className="py-[2px] text-white text-sm px-[10px] rounded-full bg-black">
-              {foods?.length}
+              {foodLenght}
             </div>
           </button>
           {categories?.map((category, index) => (

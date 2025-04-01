@@ -7,7 +7,6 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -31,17 +30,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     data: user = null,
     refetch: refetchUser,
     isLoading,
+    isError
   } = useQuery({
     queryKey: ["userEmail"],
     queryFn: () => getUserEmail(),
   });
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    } else {
-      router.push("/");
-    }
-  }, [router, user]);
+ if (isError) {
+  router.push('login')
+ }
+
   if (isLoading) {
     return <div>Loadoing...</div>;
   }
