@@ -78,12 +78,16 @@ export const RegistrationPasswordInput = ({ setStep, form }: props) => {
           )}
         />
       </div>
-      <div className="flex gap-2">
-        <input type="checkbox" onClick={() => setShow((prev) => !prev)} />
+      <label className="flex gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          className="cursor-pointer"
+          onClick={() => setShow((prev) => !prev)}
+        />
         <p>Show password</p>
-      </div>
+      </label>
       <Button type="submit" className="w-full">
-        let&apps;s go
+      let&apos;s go
       </Button>
     </div>
   );

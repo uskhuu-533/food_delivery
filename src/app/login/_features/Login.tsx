@@ -51,10 +51,13 @@ const Login = () => {
 
       toast(
         <div className="flex gap-2 w-full h-full items-center">
-          <p> Access denied. You do not have the necessary permissions to access this page.  
-          Please use the client portal instead.</p>
+          <p>
+            {" "}
+            Access denied. You do not have the necessary permissions to access
+            this page. Please use the client portal instead.
+          </p>
           <a href="https://food-delivery-user-lemon.vercel.app/">
-          <Button className="rounded-full">Client page</Button>
+            <Button className="rounded-full">Client page</Button>
           </a>{" "}
         </div>,
         {
@@ -69,7 +72,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-[40%] flex items-center justify-center">
+    <div className="w-[40%] flex items-center justify-center gap-4">
       <div className="w-[80%] flex flex-col h-fit gap-6">
         <button className="w-9 h-9 border border-[#E4E4E7] rounded-md flex items-center justify-center">
           <ChevronLeft />
@@ -81,7 +84,10 @@ const Login = () => {
           </p>
         </div>
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(checkPassword)}>
+          <form
+            onSubmit={form.handleSubmit(checkPassword)}
+            className="flex flex-col gap-4"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -108,7 +114,7 @@ const Login = () => {
                   <FormControl>
                     <Input
                       type={showPass ? "text" : "password"}
-                      placeholder="Enter your email address"
+                      placeholder="Enter your password"
                       {...field}
                     />
                   </FormControl>
@@ -116,10 +122,10 @@ const Login = () => {
                 </FormItem>
               )}
             />
-            <div className="flex gap-2">
-              <input type="checkbox" onClick={() => setShow((prev) => !prev)} />
+            <label className="flex gap-2 cursor-pointer">
+              <input type="checkbox" className="cursor-pointer" onClick={() => setShow((prev) => !prev)} />
               <p>Show password</p>
-            </div>
+            </label>
             <Button type="submit" className="py-[4px] w-full border rounded-md">
               let&apos;s go
             </Button>
@@ -128,7 +134,10 @@ const Login = () => {
 
         <div className="flex w-full justify-center gap-4">
           <p>Don’t have an account?</p>
-          <button onClick={() => router.push("/sign-up")} className="text-[#2563EB] cursor-text">
+          <button
+            onClick={() => router.push("/sign-up")}
+            className="text-[#2563EB] cursor-pointer"
+          >
             Sign up
           </button>
         </div>

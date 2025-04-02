@@ -15,8 +15,9 @@ import { useLoading } from "@/provider/LoaderProvider";
 import { PostCategory } from "@/utils/request";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { CircleCheck, Plus } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const AddCategory = () => {
   const { refetchCategory } = useCategory();
@@ -29,6 +30,7 @@ const AddCategory = () => {
     },
     onSuccess: async () => {
       await refetchCategory();
+      toast(<div className="flex itmes-center gap-6">Category added successful <CircleCheck stroke="green"/></div>)
     },
     onError: (error) => {
       console.log(error);

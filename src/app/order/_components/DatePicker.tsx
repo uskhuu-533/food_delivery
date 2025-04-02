@@ -12,7 +12,7 @@ import {
 import { useOrder } from "@/provider/OrderProvider";
 
 export function DatePicker() {
-  const {setDate, getOrders, date} = useOrder()
+  const {setDate, date} = useOrder()
   
   // Add default values to ensure date.from and date.to are always valid Date objects
   const safeDate = {
@@ -40,15 +40,6 @@ export function DatePicker() {
       to: newToDate
     });
   };
-
-  const handleSubmit = () => {
-    console.log("Selected date range:", {
-      from: format(safeDate.from, "yyyy-MM-dd"),
-      to: format(safeDate.to, "yyyy-MM-dd")
-    });
-    getOrders()
-  };
-
   return (
     <div className="grid gap-2">
       <Popover>
@@ -82,7 +73,7 @@ export function DatePicker() {
               <input 
                 id="from-date"
                 type="date" 
-                className="rounded-md border border-gray-300 p-2" 
+                className="rounded-md border border-gray-300 p-2 bg-white" 
                 value={format(safeDate.from, "yyyy-MM-dd")}
                 onChange={handleFromDateChange}
               />
@@ -95,16 +86,12 @@ export function DatePicker() {
               <input 
                 id="to-date"
                 type="date" 
-                className="rounded-md border border-gray-300 p-2" 
+                className="rounded-md border border-gray-300 p-2 bg-white" 
                 value={format(safeDate.to, "yyyy-MM-dd")}
                 onChange={handleToDateChange}
                 min={format(safeDate.from, "yyyy-MM-dd")}
               />
             </div>
-            
-            <Button className="w-full" onClick={handleSubmit}>
-              Apply Range
-            </Button>
           </div>
         </PopoverContent>
       </Popover>

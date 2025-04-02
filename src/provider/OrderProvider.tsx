@@ -10,8 +10,8 @@ import {
   useContext,
   useState,
 } from "react";
-
-type Order = {
+ 
+export type Order = {
   _id: string;
   userData: {
     email: string;
@@ -22,7 +22,7 @@ type Order = {
   totalPrice: number;
   status: string;
 };
-type item = {
+export type item = {
   food: { food_name: string; food_image: string };
   quantity: number;
 };

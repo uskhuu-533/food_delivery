@@ -18,8 +18,10 @@ import { PaginationComponent } from "@/components/Pagination";
 import ChangeOneStatus from "../_components/ChangeOneStatus";
 import { useOrder } from "@/provider/OrderProvider";
 import { format } from "date-fns";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 const OrderCont = () => {
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
   const { data } = useOrder();
   const [checkedBox, setCheckedBox] = useState<string[]>([]);
   const handleCheckBox = (id: string) => {
@@ -95,7 +97,7 @@ const OrderCont = () => {
           <TableRow></TableRow>
         </TableFooter>
       </Table>
-      <PaginationComponent totalPages={data?.totalPages} />
+      <PaginationComponent totalPages={data?.totalPages} page={page} setPage={setPage}/>
     </div>
   );
 };

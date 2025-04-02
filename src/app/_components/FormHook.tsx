@@ -10,8 +10,8 @@ import ImageInput from "./ImageInput";
 import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
 import { useLoading } from "@/provider/LoaderProvider";
-import { addFoodRequest } from "@/utils/request";
-import { useCategory } from "@/provider/CategoryProvider";
+import { toast } from "sonner";
+import { CircleCheck } from "lucide-react";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -26,10 +26,9 @@ const formSchema = z.object({
 });
 
 const FormHook = ({ category }: { category: string }) => {
-  const { foodRefetch } = useFood();
+  const { addFood } = useFood();
   const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
-  const { refetchCategory } = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,9 +51,8 @@ const FormHook = ({ category }: { category: string }) => {
           category: "",
           _id: "",
         };
-        await addFoodRequest(foodData, category);
-        await foodRefetch();
-        await refetchCategory();
+        addFood(foodData, category)
+        toast(<div className="flex itmes-center gap-6">Food added successful <CircleCheck stroke="green"/></div>)
       } catch (error) {
         console.log(error);
       } finally {

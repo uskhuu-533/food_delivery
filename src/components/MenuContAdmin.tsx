@@ -42,7 +42,7 @@ const MenuContAdmin = () => {
       <Button
         className={`px-6 flex items-center py-2 rounded-full gap-2`}
         style={path === "settings" ? { color: "white", background: "black" } : {color:"black", background:"none"}}
-        onClick={()=> router.push("/settings")}
+        onClick={()=> router.push("/settings?pages=1")}
       >
         <Settings size={22} />
         <p>Settings</p>

@@ -1,7 +1,7 @@
 import axios from "axios";
 // const baseUrl = "https://food-service-cyan.vercel.app";
-// const baseUrl = "http://localhost:3000"
-const baseUrl = "https://food-backend-8ud7.onrender.com"
+const baseUrl = "http://localhost:3000"
+// const baseUrl = "https://food-backend-8ud7.onrender.com"
 type User = {
   email : string
   address : string
@@ -50,3 +50,19 @@ export const getUserEmail = async () => {
     return null
   }
 };
+export const getUsers = async (page:number) => {
+  const token = localStorage.getItem('token')
+  try {
+    const response = await axios.get(`${baseUrl}/users/admin/${page}`, {
+      headers : {
+        Authorization : token
+      }
+    })
+    console.log(response);
+    
+    return response.data
+  } catch (error) {
+    console.log(error);
+    return {users : [], totalResults : 0, totalPages : 0}
+  }
+}

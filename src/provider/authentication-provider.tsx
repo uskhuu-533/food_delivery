@@ -1,5 +1,6 @@
 "use client";
 
+import LoaderAuth from "@/components/LoaderAuth";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -12,20 +13,21 @@ export const AuthenticationProvider = ({
   const [loading, setLoading] = useState(true);
   const path = usePathname();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
+    const token = localStorage.getItem("token");    
     if (!token) {
       if (path === "/sign-up") {
         setLoading(false);
-        return
+        return;
       }
       router.push("/login");
+      
     }
+
     setLoading(false);
   }, [router, path]);
 
   if (loading) {
-    return <div>...loading</div>;
+    return <LoaderAuth />;
   }
 
   return children;

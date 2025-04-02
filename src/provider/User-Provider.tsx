@@ -38,9 +38,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     queryFn: () => getUserEmail(),
   });
   useEffect(()=>{
+    if (isLoading) return 
+    console.log(user);
     if (!user) {
-      console.log(path);
-      
       if (path === "/sign-up") return
       router.push('/login')
      }else{

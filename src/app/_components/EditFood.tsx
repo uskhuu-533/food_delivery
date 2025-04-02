@@ -12,28 +12,20 @@ import {
 } from "@/components/ui/dialog";
 import { uploadImage } from "@/utils/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit2, Trash} from "lucide-react";
+import { CircleCheck, Edit2 } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
-import { deleteFoodRequest, putFood } from "@/utils/request";
 import { useCategory } from "@/provider/CategoryProvider";
-import { useFood } from "@/provider/FoodProvider";
+import { Food, useFood } from "@/provider/FoodProvider";
 import { useLoading } from "@/provider/LoaderProvider";
+import { toast } from "sonner";
+import DeleteFood from "./DeleteFood";
 type Props = {
   food: Food;
 };
-type Food = {
-  food_name: string;
-  price: number;
-  food_description: string;
-  food_image: string | null;
-  _id: string;
-  category : string
-};
-
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
   price: z
@@ -46,17 +38,17 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "category " }),
 });
 const EditFood = ({ food }: Props) => {
-  const { foodRefetch } = useFood();
+  const {editFood } = useFood();
   const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
-  const { categories } = useCategory();
+  const { categories} = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       food_name: food.food_name,
       price: food.price,
       food_description: food.food_description,
-      category: food.category
+      category: food.category,
     },
   });
 
@@ -74,19 +66,17 @@ const EditFood = ({ food }: Props) => {
         food_description: values.food_description,
         food_image: foodImage,
       };
-      await putFood(foodData, foodData.categoty, food._id);
-      await foodRefetch();
+      await editFood(foodData, foodData.categoty, food._id);
+      toast(
+        <div className="flex itmes-center gap-6">
+          Food edit successful <CircleCheck stroke="green" />
+        </div>
+      );
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
-  const handleDeleteFood = async () => {
-    setLoading(true);
-    await deleteFoodRequest(food._id);
-     await foodRefetch();
-     setLoading(false)
   };
   return (
     <Dialog>
@@ -145,9 +135,7 @@ const EditFood = ({ food }: Props) => {
             </DialogClose>
           </form>
         </FormProvider>
-        <DialogClose onClick={handleDeleteFood} className="w-[10%] bg-[#E11D481A] border border-[#EF4444] rounded-md py-2 flex justify-center">
-          <Trash stroke="#EF4444"/>
-        </DialogClose>
+        <DeleteFood foodId={food._id} />
         <DialogFooter className="flex justify-between"></DialogFooter>
       </DialogContent>
     </Dialog>
