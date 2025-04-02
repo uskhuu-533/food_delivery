@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -22,8 +21,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,6 +29,9 @@ export default function RootLayout({
   const [queryClient] = useState(() => new QueryClient());
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <title>NomNom admin</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -44,12 +44,12 @@ export default function RootLayout({
           >
             <NuqsAdapter>
               <QueryClientProvider client={queryClient}>
-              <AuthenticationProvider>
-                <UserProvider>
-                <LoadingProvider>{children}</LoadingProvider>
-                <Toaster />
-                </UserProvider>
-              </AuthenticationProvider>
+                <AuthenticationProvider>
+                  <UserProvider>
+                    <LoadingProvider>{children}</LoadingProvider>
+                    <Toaster />
+                  </UserProvider>
+                </AuthenticationProvider>
               </QueryClientProvider>
             </NuqsAdapter>
           </ThemeProvider>
