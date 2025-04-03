@@ -1,35 +1,34 @@
-'use client'
+"use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUsers } from "@/provider/UsersProvider";
 import { SearchIcon } from "lucide-react";
-import { useState } from "react";
 
 const SearchUser = () => {
-    const [find, setFind] = useState('email')
+  const { setSearhEmailValue, refetchUser, searchEmailValue } = useUsers();
+  const clearSearch = async () => {
+    await setSearhEmailValue('')
+    await refetchUser()
+  };
   return (
     <div className="flex pt-4 w-full gap-4">
       <Label className="flex items-center w-[500px]">
         <SearchIcon className="z-10 absolute left-2" />
-        <Input className="rounded-full pl-10" placeholder="Search user" />
+        <Input
+          className="rounded-full pl-10"
+          placeholder="Search use by email"
+          value={searchEmailValue}
+          onChange={(e) => setSearhEmailValue(e.target.value)}
+        />
       </Label>
-      <DropdownMenu>
-        <DropdownMenuTrigger className="bg-white px-3 rounded-full ">find by {find} </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>find by...</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={()=>setFind('email')}>Find by email</DropdownMenuItem>
-          <DropdownMenuItem onClick={()=>setFind('phone number')}>Find by phone number</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button className="px-3 rounded-full" onClick={refetchUser}>
+        Search{" "}
+      </Button>
+      <Button onClick={clearSearch} className="bg-red-400">
+        Clear
+      </Button>
     </div>
   );
 };

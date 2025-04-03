@@ -8,6 +8,7 @@ import {
 } from "react";
 import { QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { useCategory } from "./CategoryProvider";
+import { useLoading } from "./LoaderProvider";
 
 export type Food = {
   category: string;
@@ -41,25 +42,35 @@ export const FoodProvider = ({
   categoryId: string;
 }) => {
   const {refetchCategory} = useCategory()
+  const { setLoading} = useLoading()
   const { data: foods = [], refetch : foodRefetch} = useQuery({
     queryKey: ["foods", categoryId],
     queryFn: () => getFoods(categoryId),
     enabled : !!categoryId
   });
   const deleteFood = async (foodId:string) => {
+    setLoading(true)
     await deleteFoodRequest(foodId)
     await foodRefetch()
+    refetchCategory()
+    setLoading(false)
   }
   const editFood = async (foodData:food, category:string, id:string)=>{
+    setLoading(true)
     await putFood(foodData, category, id)
     await foodRefetch()
-    await refetchCategory()
+    refetchCategory()
+    setLoading(false)
   }
   const addFood = async (foodData : Food, category:string) => {
+    setLoading(true)
     await addFoodRequest(foodData, category)
     await foodRefetch()
-    await refetchCategory()
+    refetchCategory()
+    setLoading(false)
   }
+
+
   return (
     <FoodContext.Provider value={{ foods, foodRefetch, deleteFood, editFood, addFood}}>
       {children}

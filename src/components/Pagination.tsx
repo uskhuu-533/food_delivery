@@ -20,18 +20,18 @@ export function PaginationComponent({ totalPages, setPage, page }: Props) {
     <Pagination>
       <PaginationContent>
         {page > 1 && (
-          <PaginationItem>
+          <PaginationItem >
             <PaginationPrevious onClick={() => setPage(page - 1)} />
           </PaginationItem>
         )}
         {page > 2 && (
-          <PaginationItem>
+          <PaginationItem >
             <PaginationEllipsis />
           </PaginationItem>
         )}
         {pages.map((p) => (
           <PaginationItem key={p}>
-            <PaginationLink
+            <PaginationLink className="cursor-pointer"
               isActive={p + 1 == page}
               onClick={() => setPage(p + 1)}
             >
@@ -45,7 +45,7 @@ export function PaginationComponent({ totalPages, setPage, page }: Props) {
           </PaginationItem>
         )}
         {totalPages > page && (
-          <PaginationItem>
+          <PaginationItem >
             <PaginationNext onClick={() => setPage(page + 1)} />
           </PaginationItem>
         )}

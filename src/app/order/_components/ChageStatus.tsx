@@ -15,6 +15,7 @@ import { useLoading } from "@/provider/LoaderProvider";
 import { useOrder } from "@/provider/OrderProvider";
 import { chaneManyStatus } from "@/utils/orderRequest";
 import { useState } from "react";
+import { toast } from "sonner";
 type Props = {
   checkedOrders: string[];
 };
@@ -27,6 +28,7 @@ const ChangeStatus = ({ checkedOrders }: Props) => {
       setLoading(true)
       await chaneManyStatus(checkedOrders, status);
       await getOrders();
+      toast(<div>status changed </div>)
     }catch(error){
       console.log(error);
     }finally{

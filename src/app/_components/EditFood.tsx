@@ -20,7 +20,6 @@ import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
 import { useCategory } from "@/provider/CategoryProvider";
 import { Food, useFood } from "@/provider/FoodProvider";
-import { useLoading } from "@/provider/LoaderProvider";
 import { toast } from "sonner";
 import DeleteFood from "./DeleteFood";
 type Props = {
@@ -39,7 +38,6 @@ const formSchema = z.object({
 });
 const EditFood = ({ food }: Props) => {
   const {editFood } = useFood();
-  const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
   const { categories} = useCategory();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,7 +52,7 @@ const EditFood = ({ food }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setLoading(true);
+
       let foodImage = food.food_image;
       if (image) {
         foodImage = await uploadImage(image);
@@ -74,9 +72,7 @@ const EditFood = ({ food }: Props) => {
       );
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
   return (
     <Dialog>

@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Image, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   defaultPreview: string | null;
@@ -19,14 +19,25 @@ type Props = {
 };
 const ImageInput = ({ defaultPreview, image, setImage }: Props) => {
   const [preview, setPreview] = useState<string | null>(defaultPreview);
-  if (image instanceof File) {
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result as string);
-    reader.readAsDataURL(image);
-  }
+
+  const clearPreview = () => {
+    setImage(undefined);
+  };
+  useEffect(() => {
+    if (image instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result as string);
+      reader.readAsDataURL(image);
+    } else {
+      setPreview(null);
+    }
+  }, [image]);
+  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImage(e.target.files ? e.target.files[0] : undefined);
+  };
   return (
-    <FormItem>
-      <FormLabel className="flex flex-col gap-2">
+    <FormItem className="relative">
+      <FormLabel className="flex flex-col gap-2 cursor-pointer">
         <p>Food Image</p>
         <div>
           {preview ? (
@@ -36,12 +47,6 @@ const ImageInput = ({ defaultPreview, image, setImage }: Props) => {
                 alt="Preview"
                 className="w-full h-[150px] object-cover rounded-lg"
               />
-              <Button
-                onClick={() => setPreview(null)}
-                className="absolute rounded-full top-2 right-2 w-1 h-auto"
-              >
-                <X size={4} />
-              </Button>
             </div>
           ) : (
             <div className="w-full h-[150px] flex border-dashed border items-center justify-center bg-[#2563EB0D] border-[#2563EB33]">
@@ -49,17 +54,23 @@ const ImageInput = ({ defaultPreview, image, setImage }: Props) => {
             </div>
           )}
         </div>
+        <FormControl>
+          <input
+            className="hidden"
+            type="file"
+            accept="image/*"
+            onChange={(e) => uploadImage(e)}
+          />
+        </FormControl>
       </FormLabel>
-      <FormControl>
-        <input
-          className="hidden"
-          type="file"
-          accept="image/*"
-          onChange={(e) =>
-            setImage(e.target.files ? e.target.files[0] : undefined)
-          }
-        />
-      </FormControl>
+      {preview && (
+        <Button
+          onClick={clearPreview}
+          className="absolute rounded-full top-5 right-2 z-10 w-1 h-auto"
+        >
+          <X size={4} />
+        </Button>
+      )}
       <FormMessage>{!preview ? "image required" : null}</FormMessage>
     </FormItem>
   );

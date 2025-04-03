@@ -9,7 +9,6 @@ import FormsField from "./Form-Field";
 import ImageInput from "./ImageInput";
 import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
-import { useLoading } from "@/provider/LoaderProvider";
 import { toast } from "sonner";
 import { CircleCheck } from "lucide-react";
 
@@ -27,7 +26,6 @@ const formSchema = z.object({
 
 const FormHook = ({ category }: { category: string }) => {
   const { addFood } = useFood();
-  const { setLoading } = useLoading();
   const [image, setImage] = useState<File | undefined>(undefined);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,10 +36,11 @@ const FormHook = ({ category }: { category: string }) => {
       category: "",
     },
   });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (image) {
       try {
-        setLoading(true);
+
         const imageUploadRes: string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
@@ -55,9 +54,7 @@ const FormHook = ({ category }: { category: string }) => {
         toast(<div className="flex itmes-center gap-6">Food added successful <CircleCheck stroke="green"/></div>)
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     }
   };
   return (
