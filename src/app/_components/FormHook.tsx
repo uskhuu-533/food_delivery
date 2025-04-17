@@ -11,6 +11,7 @@ import { DialogClose } from "@/components/ui/dialog";
 import { useFood } from "@/provider/FoodProvider";
 import { toast } from "sonner";
 import { CircleCheck } from "lucide-react";
+import { useLoading } from "@/provider/LoaderProvider";
 
 const formSchema = z.object({
   food_name: z.string().min(1, { message: "Field food name is required." }),
@@ -26,6 +27,7 @@ const formSchema = z.object({
 
 const FormHook = ({ category }: { category: string }) => {
   const { addFood } = useFood();
+  const {setLoading} = useLoading()
   const [image, setImage] = useState<File | undefined>(undefined);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +42,7 @@ const FormHook = ({ category }: { category: string }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (image) {
       try {
-
+        setLoading(true)
         const imageUploadRes: string = await uploadImage(image);
         const foodData = {
           food_name: values.food_name,
@@ -51,6 +53,7 @@ const FormHook = ({ category }: { category: string }) => {
           _id: "",
         };
         addFood(foodData, category)
+        setLoading(false)
         toast(<div className="flex itmes-center gap-6">Food added successful <CircleCheck stroke="green"/></div>)
       } catch (error) {
         console.log(error);

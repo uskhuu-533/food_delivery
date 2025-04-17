@@ -22,6 +22,7 @@ import { useCategory } from "@/provider/CategoryProvider";
 import { Food, useFood } from "@/provider/FoodProvider";
 import { toast } from "sonner";
 import DeleteFood from "./DeleteFood";
+import { useLoading } from "@/provider/LoaderProvider";
 type Props = {
   food: Food;
 };
@@ -40,6 +41,7 @@ const EditFood = ({ food }: Props) => {
   const {editFood } = useFood();
   const [image, setImage] = useState<File | undefined>(undefined);
   const { categories} = useCategory();
+  const {setLoading} = useLoading()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +54,7 @@ const EditFood = ({ food }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-
+      setLoading(true)
       let foodImage = food.food_image;
       if (image) {
         foodImage = await uploadImage(image);
@@ -65,6 +67,7 @@ const EditFood = ({ food }: Props) => {
         food_image: foodImage,
       };
       await editFood(foodData, foodData.categoty, food._id);
+      setLoading(false)
       toast(
         <div className="flex itmes-center gap-6">
           Food edit successful <CircleCheck stroke="green" />
